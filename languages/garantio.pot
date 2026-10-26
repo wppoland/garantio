@@ -1,0 +1,242 @@
+# Copyright (C) 2026 WPPoland.com
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Garantio - EU Legal Guarantee & Harmonised Notice for WooCommerce 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/garantio\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-26T14:25:09+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: garantio\n"
+
+#. Plugin Name of the plugin
+#: garantio.php
+msgid "Garantio - EU Legal Guarantee & Harmonised Notice for WooCommerce"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: garantio.php
+msgid "https://plogins.com/garantio/"
+msgstr ""
+
+#. Description of the plugin
+#: garantio.php
+msgid "Statutory EU Harmonised Guarantee Notice, commercial durability labels, repairability score index, and green claims compliance auditor under Directive (EU) 2024/825."
+msgstr ""
+
+#. Author of the plugin
+#: garantio.php
+msgid "WPPoland.com"
+msgstr ""
+
+#. Author URI of the plugin
+#: garantio.php
+msgid "https://wppoland.com"
+msgstr ""
+
+#: garantio.php:48
+msgid "Garantio - EU Legal Guarantee & Harmonised Notice for WooCommerce requires WooCommerce to be active."
+msgstr ""
+
+#: src/Admin/ProductMetaBox.php:40
+msgid "Green Claims Compliance Check (Directive (EU) 2024/825)"
+msgstr ""
+
+#: src/Admin/ProductMetaBox.php:59
+msgid "No prohibited generic green claims detected."
+msgstr ""
+
+#: src/Admin/ProductMetaBox.php:65
+msgid "Risky Green Claims Detected:"
+msgstr ""
+
+#: src/Admin/ProductMetaBox.php:80
+msgid "EU Legal Guarantee & Durability (Directive 2024/825)"
+msgstr ""
+
+#: src/Admin/ProductMetaBox.php:84
+msgid "Exempt Product"
+msgstr ""
+
+#: src/Admin/ProductMetaBox.php:85
+msgid "Exempt digital downloads, services, or non-goods from statutory guarantee notice."
+msgstr ""
+
+#: src/Admin/ProductMetaBox.php:90
+msgid "Commercial Durability (Years)"
+msgstr ""
+
+#: src/Admin/ProductMetaBox.php:91
+msgid "If the producer provides a commercial durability guarantee at no extra cost exceeding 2 years (e.g. 3, 5, 10)."
+msgstr ""
+
+#: src/Admin/ProductMetaBox.php:99
+msgid "Producer / Brand Name"
+msgstr ""
+
+#: src/Admin/ProductMetaBox.php:100
+msgid "Name of the manufacturer offering the commercial durability guarantee."
+msgstr ""
+
+#: src/Admin/ProductMetaBox.php:106
+msgid "Repairability Score (1.0 - 10.0)"
+msgstr ""
+
+#: src/Admin/ProductMetaBox.php:107
+msgid "Official repairability index or score where available under EU or national rules."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:29
+msgid "Garantio EU Guarantees"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:30
+msgid "EU Legal Guarantee"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:76
+msgid "Garantio - EU Harmonised Guarantee & Durability Notices"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:78
+msgid "Mandatory consumer information and green claims safety compliance under Directive (EU) 2024/825 and Directive 2011/83/EU."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:85
+msgid "Enable Harmonised Notice"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:89
+msgid "Display the statutory legal guarantee notice on product pages"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:94
+msgid "Statutory Guarantee Duration"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:97
+msgid "years (minimum 2 years across EU per Directive (EU) 2019/771 art. 10)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:101
+msgid "Display Location"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:105
+msgid "Under single product summary (near add to cart)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:109
+msgid "In a dedicated product tab (\"Guarantee & Durability\")"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:114
+msgid "Custom Notice Override"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:118
+msgid "Leave empty to use official localized Harmonised Notice templates."
+msgstr ""
+
+#: src/Model/GreenClaimsRules.php:26
+msgid "Claims that a product has a neutral, reduced or positive greenhouse gas emission impact based on carbon offsetting are banned."
+msgstr ""
+
+#: src/Model/GreenClaimsRules.php:32
+msgid "Generic environmental claims without demonstrated recognized excellent environmental performance (e.g. EU Ecolabel) are prohibited."
+msgstr ""
+
+#: src/Model/GreenClaimsRules.php:38
+msgid "Unsubstantiated generic biodegradability claims without recognized certification are prohibited."
+msgstr ""
+
+#: src/Model/GreenClaimsRules.php:44
+msgid "Net zero or climate positive product claims based on carbon offset credits are banned."
+msgstr ""
+
+#. translators: %d: statutory guarantee duration in years (default 2)
+#: src/Model/GuaranteeNotice.php:25
+#, php-format
+msgid "Consumers are entitled by law to a minimum %d-year legal guarantee of conformity free of charge with the seller."
+msgstr ""
+
+#. translators: %d: statutory guarantee duration in years (default 2)
+#: src/Model/GuaranteeNotice.php:27
+#, php-format
+msgid "Konsumenci sa uprawnieni na mocy prawa do bezplatnej co najmniej %d-letniej ustawowej gwarancji zgodnosci towaru z umowa."
+msgstr ""
+
+#. translators: %d: statutory guarantee duration in years (default 2)
+#: src/Model/GuaranteeNotice.php:29
+#, php-format
+msgid "Verbrauchern steht von Gesetzes wegen eine unentgeltliche gesetzliche Gewahrleistung von mindestens %d Jahren beim Verkaufer zu."
+msgstr ""
+
+#. translators: %d: statutory guarantee duration in years (default 2)
+#: src/Model/GuaranteeNotice.php:31
+#, php-format
+msgid "Los consumidores tienen derecho por ley a una garantia legal de conformidad gratuita de al menos %d anos ante el vendedor."
+msgstr ""
+
+#. translators: %d: statutory guarantee duration in years (default 2)
+#: src/Model/GuaranteeNotice.php:33
+#, php-format
+msgid "Consumatorii au dreptul legal la o garantie de conformitate gratuita de cel putin %d ani fata de vanzator."
+msgstr ""
+
+#. translators: 1: producer name or label, 2: duration in years
+#: src/Model/GuaranteeNotice.php:46
+#, php-format
+msgid "%1$s offers a %2$d-year commercial guarantee of durability at no extra cost."
+msgstr ""
+
+#. translators: 1: producer name or label, 2: duration in years
+#: src/Model/GuaranteeNotice.php:48
+#, php-format
+msgid "%1$s oferuje %2$d-letnia dobrowolna gwarancje trwalosci bez dodatkowych oplat."
+msgstr ""
+
+#. translators: 1: producer name or label, 2: duration in years
+#: src/Model/GuaranteeNotice.php:50
+#, php-format
+msgid "%1$s gewahrt eine %2$d-jahrige gewerbliche Haltbarkeitsgarantie ohne zusatzliche Kosten."
+msgstr ""
+
+#. translators: 1: producer name or label, 2: duration in years
+#: src/Model/GuaranteeNotice.php:52
+#, php-format
+msgid "%1$s ofrece una garantia comercial de durabilidad de %2$d anos sin coste adicional."
+msgstr ""
+
+#. translators: 1: producer name or label, 2: duration in years
+#: src/Model/GuaranteeNotice.php:54
+#, php-format
+msgid "%1$s ofera o garantie comerciala de durabilitate de %2$d ani fara costuri suplimentare."
+msgstr ""
+
+#: src/Service/GuaranteeService.php:81
+msgid "EU Statutory Legal Guarantee"
+msgstr ""
+
+#: src/Service/GuaranteeService.php:102
+msgid "The manufacturer"
+msgstr ""
+
+#: src/Service/GuaranteeService.php:110
+msgid "Durability Guarantee:"
+msgstr ""
+
+#. translators: %s: numeric score out of 10
+#: src/Service/GuaranteeService.php:146
+#, php-format
+msgid "Repairability Index: %s / 10"
+msgstr ""
+
+#: src/Service/GuaranteeService.php:158
+msgid "Guarantee & Durability"
+msgstr ""

@@ -1,4 +1,4 @@
-# Garantio - EU Legal Guarantee & Harmonised Notice for WooCommerce
+# Garantio - EU Legal Guarantee & Harmonised Notice
 
 EU Harmonised Guarantee Notice, commercial durability label, repairability score index, and green claims compliance auditor for WooCommerce under Directive (EU) 2024/825.
 

@@ -1,4 +1,4 @@
-=== Garantio - EU Legal Guarantee & Harmonised Notice for WooCommerce ===
+=== Garantio - EU Legal Guarantee & Harmonised Notice ===
 Contributors: motylanogha
 Tags: woocommerce, guarantee, legal guarantee, harmonised notice, green claims
 Requires at least: 6.5

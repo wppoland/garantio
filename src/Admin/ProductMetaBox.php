@@ -76,6 +76,8 @@ final class ProductMetaBox implements HasHooks
 
     public function renderProductFields(): void
     {
+        wp_nonce_field('garantio_save_product_fields', 'garantio_product_nonce');
+
         echo '<div class="options_group garantio-options-group">';
         echo '<h4 style="padding-left:12px;">' . esc_html__('EU Legal Guarantee & Durability (Directive 2024/825)', 'garantio') . '</h4>';
 
@@ -115,15 +117,28 @@ final class ProductMetaBox implements HasHooks
 
     public function saveProductFields(int $productId): void
     {
+        if (
+            ! isset($_POST['garantio_product_nonce']) ||
+            ! wp_verify_nonce(sanitize_key(wp_unslash($_POST['garantio_product_nonce'])), 'garantio_save_product_fields')
+        ) {
+            return;
+        }
+
+        if (! current_user_can('edit_post', $productId)) {
+            return;
+        }
+
         $product = wc_get_product($productId);
         if (! $product instanceof \WC_Product) {
             return;
         }
 
         $exempt   = isset($_POST[GuaranteeService::META_EXEMPT_GUARANTEE]) ? 'yes' : 'no';
-        $years    = isset($_POST[GuaranteeService::META_DURABILITY_YEARS]) ? max(0, (int) $_POST[GuaranteeService::META_DURABILITY_YEARS]) : 0;
-        $producer = isset($_POST[GuaranteeService::META_DURABILITY_PRODUCER]) ? sanitize_text_field((string) $_POST[GuaranteeService::META_DURABILITY_PRODUCER]) : '';
-        $repair   = isset($_POST[GuaranteeService::META_REPAIR_SCORE]) && $_POST[GuaranteeService::META_REPAIR_SCORE] !== '' ? min(10.0, max(0.0, (float) $_POST[GuaranteeService::META_REPAIR_SCORE])) : '';
+        $years    = isset($_POST[GuaranteeService::META_DURABILITY_YEARS]) ? max(0, absint(wp_unslash($_POST[GuaranteeService::META_DURABILITY_YEARS]))) : 0;
+        $producer = isset($_POST[GuaranteeService::META_DURABILITY_PRODUCER]) ? sanitize_text_field(wp_unslash($_POST[GuaranteeService::META_DURABILITY_PRODUCER])) : '';
+        $repair   = isset($_POST[GuaranteeService::META_REPAIR_SCORE]) && '' !== $_POST[GuaranteeService::META_REPAIR_SCORE]
+            ? min(10.0, max(0.0, (float) sanitize_text_field(wp_unslash($_POST[GuaranteeService::META_REPAIR_SCORE]))))
+            : '';
 
         $product->update_meta_data(GuaranteeService::META_EXEMPT_GUARANTEE, $exempt);
         $product->update_meta_data(GuaranteeService::META_DURABILITY_YEARS, $years > 0 ? $years : '');

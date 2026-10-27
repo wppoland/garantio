@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Garantio - EU Legal Guarantee & Harmonised Notice
  * Plugin URI:        https://plogins.com/garantio/
- * Description:       Statutory EU Harmonised Guarantee Notice, commercial durability labels, repairability score index, and green claims compliance auditor under Directive (EU) 2024/825.
+ * Description:       Statutory EU Harmonised Guarantee Notice, durability labels, repairability score, and green claims compliance auditor under Directive (EU) 2024/825.
  * Version:           1.0.0
  * Requires at least: 6.5
  * Requires PHP:      8.1

@@ -8,7 +8,7 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Statutory EU Harmonised Guarantee Notice, commercial durability labels, repairability score index, and green claims compliance auditor under Directive (EU) 2024/825.
+Statutory EU Harmonised Guarantee Notice, durability labels, repairability score, and green claims compliance auditor under Directive (EU) 2024/825.
 
 == Description ==
 

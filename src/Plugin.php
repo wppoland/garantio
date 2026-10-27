@@ -42,13 +42,6 @@ final class Plugin
         $this->guaranteeService->registerHooks();
         $this->productMetaBox->registerHooks();
         $this->settingsPage->registerHooks();
-
-        add_action('init', [$this, 'loadTextdomain']);
-    }
-
-    public function loadTextdomain(): void
-    {
-        load_plugin_textdomain('garantio', false, dirname(plugin_basename(PLUGIN_FILE)) . '/languages');
     }
 
     public function getGuaranteeService(): GuaranteeService

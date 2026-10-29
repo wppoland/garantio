@@ -1,4 +1,4 @@
-# Garantio - EU Legal Guarantee & Harmonised Notice
+# Garantio - EU Legal Guarantee Notice for WooCommerce
 
 Legal guarantee reminder, commercial durability guarantee note, repairability score badge and a green claims phrase check for WooCommerce product pages.
 

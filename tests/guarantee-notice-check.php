@@ -47,7 +47,7 @@ function get_option(string $option, $default = false)
 // ------------------- TEST SUITE -------------------
 echo "Running Garantio Guarantee & Green Claims Tests...\n";
 
-// 1. Test Harmonised Notice Templates
+// 1. Test guarantee notice templates
 $notices = \Garantio\Model\GuaranteeNotice::defaultNotices();
 assert(isset($notices['en']), 'English notice exists');
 assert(isset($notices['pl']), 'Polish notice exists');
@@ -58,7 +58,7 @@ assert(isset($notices['ro']), 'Romanian notice exists');
 $enNotice = sprintf($notices['en'], 2);
 assert(str_contains($enNotice, 'minimum 2-year legal guarantee of conformity'), 'English notice text correct');
 
-echo "  ok  Harmonised Notice multilingual templates verified\n";
+echo "  ok  guarantee notice multilingual templates verified\n";
 
 // 2. Test Commercial Durability Label
 $durabilityLabels = \Garantio\Model\GuaranteeNotice::durabilityLabels();

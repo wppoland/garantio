@@ -1,10 +1,10 @@
-=== Garantio - EU Legal Guarantee & Harmonised Notice ===
+=== Garantio - EU Legal Guarantee Notice for WooCommerce ===
 Contributors: motylanogha
-Tags: woocommerce, guarantee, legal guarantee, harmonised notice, green claims
+Tags: woocommerce, guarantee, legal guarantee, repairability, green claims
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,6 +61,9 @@ Article 6(1)(la) of Directive 2011/83/EU requires the harmonised label of Articl
 No. The green claims check matches product text against a short list of phrases linked to points 4a and 4c of Annex I to Directive 2005/29/EC (as amended by Directive (EU) 2024/825) and warns you in the product editor. Whether a claim is allowed depends on what you can show for it.
 
 == Changelog ==
+
+= 1.0.2 =
+* Changed: display name is now "Garantio - EU Legal Guarantee Notice for WooCommerce". The old name suggested the plugin shows the harmonised notice of Article 22a of Directive 2011/83/EU; it shows its own text reminder.
 
 = 1.0.1 =
 * Fixed: legal references. The guarantee reminder is Article 6(1)(l) of Directive 2011/83/EU and the durability note Article 6(1)(la), not Article 6(1)(ea) or 22a(2); offsetting claims are point 4c of Annex I to Directive 2005/29/EC, not 4b. The readme now says the 2024/825 rules apply from 27 September 2026 in Member States and from 27 September 2027 in Poland, and that the plugin shows text, not the harmonised notice or label.

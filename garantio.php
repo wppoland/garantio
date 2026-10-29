@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name:       Garantio - EU Legal Guarantee & Harmonised Notice
+ * Plugin Name:       Garantio - EU Legal Guarantee Notice for WooCommerce
  * Plugin URI:        https://plogins.com/garantio/
  * Description:       Legal guarantee reminder, commercial durability guarantee note, repairability score badge and a green claims phrase check for WooCommerce product pages.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Requires at least: 6.5
  * Requires PHP:      8.1
  * Requires Plugins:  woocommerce
@@ -45,7 +45,7 @@ add_action('plugins_loaded', static function (): void {
     if (! class_exists('WooCommerce')) {
         add_action('admin_notices', static function (): void {
             echo '<div class="notice notice-error"><p>';
-            echo esc_html__('Garantio - EU Legal Guarantee & Harmonised Notice for WooCommerce requires WooCommerce to be active.', 'garantio');
+            echo esc_html__('Garantio - EU Legal Guarantee Notice for WooCommerce requires WooCommerce to be active.', 'garantio');
             echo '</p></div>';
         });
         return;

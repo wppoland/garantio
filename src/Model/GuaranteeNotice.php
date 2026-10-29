@@ -7,14 +7,14 @@ namespace Garantio\Model;
 defined('ABSPATH') || exit;
 
 /**
- * Statutory guarantee rules and Harmonised Notice templates per Directive (EU) 2024/825.
+ * Legal guarantee reminder and durability note texts (Directive 2011/83/EU art. 6(1)(l) and (la)).
  */
 final class GuaranteeNotice
 {
     public const DEFAULT_STATUTORY_YEARS = 2;
 
     /**
-     * Standard text templates for the EU Harmonised Notice.
+     * Default text of the legal guarantee reminder (not the art. 22a harmonised notice).
      *
      * @return array<string, string>
      */
@@ -35,7 +35,7 @@ final class GuaranteeNotice
     }
 
     /**
-     * Standard text template for the EU Harmonised Label (commercial durability guarantee).
+     * Default text of the commercial durability guarantee note (not the art. 22a harmonised label).
      *
      * @return array<string, string>
      */

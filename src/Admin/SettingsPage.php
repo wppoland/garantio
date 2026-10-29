@@ -73,16 +73,16 @@ final class SettingsPage implements HasHooks
         $settings = is_array($raw) ? $raw : [];
         ?>
         <div class="wrap garantio-settings-wrap">
-            <h1><?php echo esc_html__('Garantio - EU Harmonised Guarantee & Durability Notices', 'garantio'); ?></h1>
+            <h1><?php echo esc_html__('Garantio - EU Legal Guarantee & Durability Notices', 'garantio'); ?></h1>
             <p class="description">
-                <?php echo esc_html__('Mandatory consumer information and green claims safety compliance under Directive (EU) 2024/825 and Directive 2011/83/EU.', 'garantio'); ?>
+                <?php echo esc_html__('Legal guarantee reminder, durability guarantee note and green claims check (Directive 2011/83/EU and Directive 2005/29/EC, as amended by Directive (EU) 2024/825).', 'garantio'); ?>
             </p>
 
             <form method="post" action="options.php">
                 <?php settings_fields(self::PAGE_SLUG); ?>
                 <table class="form-table">
                     <tr>
-                        <th scope="row"><?php echo esc_html__('Enable Harmonised Notice', 'garantio'); ?></th>
+                        <th scope="row"><?php echo esc_html__('Enable legal guarantee reminder', 'garantio'); ?></th>
                         <td>
                             <label>
                                 <input type="checkbox" name="<?php echo esc_attr(GuaranteeService::OPTION); ?>[enabled]" value="1" <?php checked(! empty($settings['enabled'])); ?> />
@@ -94,7 +94,7 @@ final class SettingsPage implements HasHooks
                         <th scope="row"><?php echo esc_html__('Statutory Guarantee Duration', 'garantio'); ?></th>
                         <td>
                             <input type="number" min="2" step="1" name="<?php echo esc_attr(GuaranteeService::OPTION); ?>[statutory_years]" value="<?php echo esc_attr((string) ($settings['statutory_years'] ?? 2)); ?>" />
-                            <span><?php echo esc_html__('years (minimum 2 years across EU per Directive (EU) 2019/771 art. 10)', 'garantio'); ?></span>
+                            <span><?php echo esc_html__('years (at least 2 under Directive (EU) 2019/771)', 'garantio'); ?></span>
                         </td>
                     </tr>
                     <tr>
@@ -115,7 +115,7 @@ final class SettingsPage implements HasHooks
                         <td>
                             <input type="text" class="large-text" name="<?php echo esc_attr(GuaranteeService::OPTION); ?>[custom_notice]" value="<?php echo esc_attr($settings['custom_notice'] ?? ''); ?>" />
                             <p class="description">
-                                <?php echo esc_html__('Leave empty to use official localized Harmonised Notice templates.', 'garantio'); ?>
+                                <?php echo esc_html__('Leave empty to use the built-in reminder text.', 'garantio'); ?>
                             </p>
                         </td>
                     </tr>

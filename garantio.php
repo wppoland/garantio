@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       Garantio - EU Legal Guarantee & Harmonised Notice
  * Plugin URI:        https://plogins.com/garantio/
- * Description:       Statutory EU Harmonised Guarantee Notice, durability labels, repairability score, and green claims compliance auditor under Directive (EU) 2024/825.
- * Version:           1.0.0
+ * Description:       Legal guarantee reminder, commercial durability guarantee note, repairability score badge and a green claims phrase check for WooCommerce product pages.
+ * Version:           1.0.1
  * Requires at least: 6.5
  * Requires PHP:      8.1
  * Requires Plugins:  woocommerce

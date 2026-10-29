@@ -22,25 +22,25 @@ final class GreenClaimsRules
             [
                 'term' => 'climate neutral',
                 'pattern' => '/\b(climate[- ]neutral|carbon[- ]neutral|co2[- ]neutral|neutraln[ye] klimatycznie|klimaneutral)\b/i',
-                'legal_basis' => 'Directive (EU) 2024/825 Annex I point 4b',
+                'legal_basis' => 'Directive 2005/29/EC Annex I point 4c (Directive (EU) 2024/825)',
                 'reason' => __('Claims that a product has a neutral, reduced or positive greenhouse gas emission impact based on carbon offsetting are banned.', 'garantio'),
             ],
             [
                 'term' => 'eco-friendly / green',
                 'pattern' => '/\b(eco[- ]friendly|environmentally friendly|przyjazn[ye] dla srodowiska|ekologiczn[ye]|umweltfreundlich|ecologico)\b/i',
-                'legal_basis' => 'Directive (EU) 2024/825 Annex I point 4a',
+                'legal_basis' => 'Directive 2005/29/EC Annex I point 4a (Directive (EU) 2024/825)',
                 'reason' => __('Generic environmental claims without demonstrated recognized excellent environmental performance (e.g. EU Ecolabel) are prohibited.', 'garantio'),
             ],
             [
                 'term' => '100% biodegradable',
                 'pattern' => '/\b(100% biodegradable|biodegradable|biodegradowalny|biodegradabil)\b/i',
-                'legal_basis' => 'Directive (EU) 2024/825 Annex I point 4a',
-                'reason' => __('Unsubstantiated generic biodegradability claims without recognized certification are prohibited.', 'garantio'),
+                'legal_basis' => 'Directive 2005/29/EC Annex I point 4a (Directive (EU) 2024/825)',
+                'reason' => __('Generic biodegradability claims without demonstrated recognised excellent environmental performance are prohibited.', 'garantio'),
             ],
             [
                 'term' => 'climate positive / net zero',
                 'pattern' => '/\b(climate positive|net zero|pozytywny klimatycznie)\b/i',
-                'legal_basis' => 'Directive (EU) 2024/825 Annex I point 4b',
+                'legal_basis' => 'Directive 2005/29/EC Annex I point 4c (Directive (EU) 2024/825)',
                 'reason' => __('Net zero or climate positive product claims based on carbon offset credits are banned.', 'garantio'),
             ],
         ];

@@ -10,7 +10,7 @@ use Garantio\Model\GuaranteeNotice;
 defined('ABSPATH') || exit;
 
 /**
- * Renders statutory Harmonised Notice, Durability Label, and Repairability Score on product pages.
+ * Renders the legal guarantee reminder, durability guarantee note and repairability score on product pages.
  */
 final class GuaranteeService implements HasHooks
 {
@@ -55,7 +55,7 @@ final class GuaranteeService implements HasHooks
     }
 
     /**
-     * Render the statutory EU Harmonised Notice (Directive (EU) 2024/825 art. 22a(1)).
+     * Render the legal guarantee reminder (Directive 2011/83/EU art. 6(1)(l)); plain text, not the art. 22a harmonised notice.
      */
     public function renderHarmonisedNotice(): void
     {
@@ -84,7 +84,7 @@ final class GuaranteeService implements HasHooks
     }
 
     /**
-     * Render Harmonised Label for commercial durability guarantee exceeding 2 years (art. 22a(2)).
+     * Render the commercial durability guarantee note over 2 years (Directive 2011/83/EU art. 6(1)(la)); plain text, not the art. 22a harmonised label.
      */
     public function renderDurabilityLabel(): void
     {

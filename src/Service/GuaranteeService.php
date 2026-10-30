@@ -10,7 +10,7 @@ use Garantio\Model\GuaranteeNotice;
 defined('ABSPATH') || exit;
 
 /**
- * Renders the legal guarantee reminder, durability guarantee note and repairability score on product pages.
+ * Renders the legal guarantee reminder, durability guarantee note and repairability class on product pages.
  */
 final class GuaranteeService implements HasHooks
 {
@@ -18,8 +18,11 @@ final class GuaranteeService implements HasHooks
 
     public const META_DURABILITY_YEARS  = '_garantio_durability_years';
     public const META_DURABILITY_PRODUCER = '_garantio_durability_producer';
-    public const META_REPAIR_SCORE      = '_garantio_repair_score'; // 1.0 to 10.0
+    public const META_REPAIR_SCORE      = '_garantio_repair_score'; // repairability class A to E
     public const META_EXEMPT_GUARANTEE  = '_garantio_exempt_guarantee'; // e.g. digital goods / services
+
+    /** Repairability classes of Delegated Regulation (EU) 2023/1669, Annex II, Table 4. */
+    public const REPAIR_CLASSES = ['A', 'B', 'C', 'D', 'E'];
 
     /**
      * @var array<string, mixed>
@@ -126,7 +129,7 @@ final class GuaranteeService implements HasHooks
     }
 
     /**
-     * Render repairability score badge if assigned.
+     * Render the repairability class badge if one is assigned.
      */
     public function renderRepairabilityScore(): void
     {
@@ -135,23 +138,22 @@ final class GuaranteeService implements HasHooks
             return;
         }
 
-        $score = self::repairScore($product);
-        if ($score === null) {
+        $class = self::repairClass($product);
+        if ($class === null) {
             return;
         }
 
-        // Color scale: green (>=8.0), yellow (6.0-7.9), orange (4.0-5.9), red (<4.0)
-        $badgeColor = match (true) {
-            $score >= 8.0 => '#16a34a',
-            $score >= 6.0 => '#ca8a04',
-            $score >= 4.0 => '#ea580c',
+        $badgeColor = match ($class) {
+            'A', 'B' => '#16a34a',
+            'C' => '#ca8a04',
+            'D' => '#ea580c',
             default => '#dc2626',
         };
 
         echo '<div class="garantio-repair-score" style="margin: 8px 0; font-size: 0.88em;">';
         echo '<span style="display:inline-block; padding: 2px 8px; border-radius: 3px; font-weight: bold; color: #fff; background: ' . esc_attr($badgeColor) . ';">';
-        /* translators: %s: numeric score out of 10 */
-        printf(esc_html__('Repairability Index: %s / 10', 'garantio'), esc_html((string) $score));
+        /* translators: %s: repairability class letter, A (most repairable) to E (least repairable) */
+        printf(esc_html__('Repairability class: %s (A to E, Regulation (EU) 2023/1669)', 'garantio'), esc_html($class));
         echo '</span>';
         echo '</div>';
     }
@@ -198,22 +200,20 @@ final class GuaranteeService implements HasHooks
         return $years > 2 ? $years : 0;
     }
 
-    private static function repairScore(\WC_Product $product): ?float
+    /**
+     * A number stored by 1.0.x is not a class and is not shown.
+     */
+    private static function repairClass(\WC_Product $product): ?string
     {
-        $raw = $product->get_meta(self::META_REPAIR_SCORE, true);
-        if ($raw === '' || ! is_numeric($raw)) {
-            return null;
-        }
+        $raw = (string) $product->get_meta(self::META_REPAIR_SCORE, true);
 
-        $score = round((float) $raw, 1);
-
-        return $score > 0.0 ? $score : null;
+        return in_array($raw, self::REPAIR_CLASSES, true) ? $raw : null;
     }
 
     private function hasContent(\WC_Product $product): bool
     {
         return $this->showsReminder($product)
             || self::durabilityYears($product) > 0
-            || self::repairScore($product) !== null;
+            || self::repairClass($product) !== null;
     }
 }

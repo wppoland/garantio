@@ -82,7 +82,7 @@ final class SettingsPage implements HasHooks
                         <td>
                             <label>
                                 <input type="checkbox" name="<?php echo esc_attr(GuaranteeService::OPTION); ?>[enabled]" value="1" <?php checked(! empty($settings['enabled'])); ?> />
-                                <?php echo esc_html__('Display the legal guarantee reminder, durability note and repairability score on product pages', 'garantio'); ?>
+                                <?php echo esc_html__('Display the legal guarantee reminder, durability note and repairability class on product pages', 'garantio'); ?>
                             </label>
                         </td>
                     </tr>

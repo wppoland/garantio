@@ -30,13 +30,13 @@ final class GreenClaimsRules
                 'term' => 'eco-friendly / ecological',
                 'pattern' => '/\b(eco[- ]friendly|environmentally friendly|przyjazn\w* dla [śs]rodowiska|ekologiczn|umweltfreundlich|ecol[óo]gic)/iu',
                 'legal_basis' => 'Directive 2005/29/EC Annex I point 4a (Directive (EU) 2024/825)',
-                'reason' => __('A generic environmental claim is banned unless you can show recognised excellent environmental performance relevant to it, or the claim is specified in clear terms on the same page.', 'garantio'),
+                'reason' => __('A generic environmental claim is banned unless you can show recognised excellent environmental performance relevant to it, or the claim is specified in clear and prominent terms on the same medium (recital 9 of Directive (EU) 2024/825).', 'garantio'),
             ],
             [
                 'term' => 'biodegradable',
                 'pattern' => '/\b(biodegradab|biodegradowaln|biologisch abbaubar)/iu',
                 'legal_basis' => 'Directive 2005/29/EC Annex I point 4a (Directive (EU) 2024/825)',
-                'reason' => __('A generic biodegradability claim is banned unless you can show recognised excellent environmental performance relevant to it, or the claim is specified in clear terms on the same page.', 'garantio'),
+                'reason' => __('A generic biodegradability claim is banned unless you can show recognised excellent environmental performance relevant to it, or the claim is specified in clear and prominent terms on the same medium (recital 9 of Directive (EU) 2024/825).', 'garantio'),
             ],
             [
                 'term' => 'climate positive / net zero',

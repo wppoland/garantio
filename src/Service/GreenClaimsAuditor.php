@@ -13,6 +13,9 @@ defined('ABSPATH') || exit;
  */
 final class GreenClaimsAuditor
 {
+    /** Variation descriptions read per product; a larger catalogue is cut here. */
+    public const MAX_VARIATIONS = 100;
+
     /**
      * Audit product text against Directive (EU) 2024/825 green claims rules.
      *
@@ -53,7 +56,7 @@ final class GreenClaimsAuditor
             }
         }
 
-        foreach ($product->get_children() as $childId) {
+        foreach (array_slice(self::variationIds($product), 0, self::MAX_VARIATIONS) as $childId) {
             $child = wc_get_product($childId);
             if ($child instanceof \WC_Product) {
                 $parts[] = $child->get_description();
@@ -61,5 +64,15 @@ final class GreenClaimsAuditor
         }
 
         return $this->auditText(wp_strip_all_tags(implode(' ', $parts)));
+    }
+
+    /**
+     * Variation ids of a variable product; children of a grouped product are other products and are not read.
+     *
+     * @return array<int, int>
+     */
+    public static function variationIds(\WC_Product $product): array
+    {
+        return $product->is_type('variable') ? array_values(array_map('intval', $product->get_children())) : [];
     }
 }

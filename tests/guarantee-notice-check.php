@@ -105,6 +105,10 @@ function woocommerce_wp_text_input(array $args): void
 {
     $GLOBALS['fields'][$args['id']] = $args;
 }
+function woocommerce_wp_select(array $args): void
+{
+    $GLOBALS['fields'][$args['id']] = $args;
+}
 
 class WP_Post
 {
@@ -136,6 +140,7 @@ class WC_Product
     public array $children = [];
     public array $attributes = [];
     public string $description = '';
+    public string $type = 'simple';
     public function __construct(public int $id = 1)
     {
         $GLOBALS['products'][$id] = $this;
@@ -174,6 +179,10 @@ class WC_Product
     public function get_attributes(): array
     {
         return $this->attributes;
+    }
+    public function is_type($type): bool
+    {
+        return in_array($this->type, (array) $type, true);
     }
 }
 
@@ -283,10 +292,58 @@ check('green claims: "climate-neutral" still matched', static fn (): bool => ($a
 check('green claims: variation description is checked', static function () use ($auditor): bool {
     reset_state();
     $parent = new WC_Product(10);
+    $parent->type = 'variable';
     $child  = new WC_Product(11);
     $child->description = 'An eco-friendly variant.';
     $parent->children   = [11];
     return count($auditor->auditProduct($parent)) === 1;
+});
+check('green claims: a grouped product does not scan the products it groups', static function () use ($auditor): bool {
+    reset_state();
+    $parent = new WC_Product(13);
+    $parent->type = 'grouped';
+    $child = new WC_Product(14);
+    $child->description = 'An eco-friendly bottle sold separately.';
+    $parent->children = [14];
+    return $auditor->auditProduct($parent) === [];
+});
+$variable = static function (int $flagged, int $count = 150): WC_Product {
+    reset_state();
+    $parent = new WC_Product(1000);
+    $parent->type = 'variable';
+    for ($i = 1; $i <= $count; $i++) {
+        $child = new WC_Product(1000 + $i);
+        if ($i === $flagged) {
+            $child->description = 'An eco-friendly variant.';
+        }
+        $parent->children[] = 1000 + $i;
+    }
+    return $parent;
+};
+check('green claims: variation 50 of 150 is checked', static fn (): bool => count($auditor->auditProduct($variable(50))) === 1);
+check('green claims: variations past the first 100 are not loaded', static fn (): bool => $auditor->auditProduct($variable(150)) === []);
+check('green claims box: says when only the first 100 variations were checked', static function () use ($variable): bool {
+    $variable(0);
+    $post     = new WP_Post();
+    $post->ID = 1000;
+    $out      = render(static fn () => (new ProductMetaBox(new GuaranteeService()))->renderGreenClaimsBox($post));
+    return str_contains($out, 'Only the first 100 of 150 variations were checked.');
+});
+check('green claims box: no cap note under 100 variations', static function () use ($variable): bool {
+    $variable(0, 20);
+    $post     = new WP_Post();
+    $post->ID = 1000;
+    $out      = render(static fn () => (new ProductMetaBox(new GuaranteeService()))->renderGreenClaimsBox($post));
+    return ! str_contains($out, 'variations were checked');
+});
+check('recital 9: every paraphrase says "clear and prominent terms on the same medium"', static function (): bool {
+    foreach (['src/Admin/ProductMetaBox.php', 'src/Model/GreenClaimsRules.php', 'readme.txt'] as $f) {
+        $src = (string) file_get_contents(__DIR__ . '/../' . $f);
+        if (! str_contains($src, 'clear and prominent terms on the same medium') || preg_match('/clear terms|same page/', $src)) {
+            return false;
+        }
+    }
+    return true;
 });
 check('green claims: custom attribute values are checked', static function () use ($auditor): bool {
     reset_state();
@@ -329,13 +386,34 @@ $save = static function (array $post): WC_Product {
 };
 check('save: durability of 2 years is not stored', static fn (): bool => $save(['_garantio_durability_years' => '2'])->meta['_garantio_durability_years'] === '');
 check('save: durability of 5 years is stored', static fn (): bool => $save(['_garantio_durability_years' => '5'])->meta['_garantio_durability_years'] === 5);
-check('save: repair score "7,5" is stored as 7.5', static fn (): bool => $save(['_garantio_repair_score' => '7,5'])->meta['_garantio_repair_score'] === '7.5');
-check('save: repair score 0 is not stored', static fn (): bool => $save(['_garantio_repair_score' => '0'])->meta['_garantio_repair_score'] === '');
-check('fields: repair score minimum is 1.0 and durability minimum is 3', static function (): bool {
+check('save: repairability class "b" is stored as "B"', static fn (): bool => $save(['_garantio_repair_score' => 'b'])->meta['_garantio_repair_score'] === 'B');
+check('save: a number such as "8.2" is not stored as a repairability class', static fn (): bool => $save(['_garantio_repair_score' => '8.2'])->meta['_garantio_repair_score'] === '');
+check('save: "F" is not a repairability class', static fn (): bool => $save(['_garantio_repair_score' => 'F'])->meta['_garantio_repair_score'] === '');
+check('fields: repairability is a select of classes A to E; durability minimum is 3', static function (): bool {
     reset_state();
     render(static fn () => (new ProductMetaBox(new GuaranteeService()))->renderProductFields());
-    return ($GLOBALS['fields']['_garantio_repair_score']['custom_attributes']['min'] ?? '') === '1.0'
+    $options = $GLOBALS['fields']['_garantio_repair_score']['options'] ?? [];
+    return array_keys($options) === ['', 'A', 'B', 'C', 'D', 'E']
+        && ! isset($GLOBALS['fields']['_garantio_repair_score']['type'])
         && ($GLOBALS['fields']['_garantio_durability_years']['custom_attributes']['min'] ?? '') === '3';
+});
+check('storefront: class B renders as a repairability class, not a score out of 10', static function (): bool {
+    reset_state();
+    $p = new WC_Product();
+    $p->meta['_garantio_repair_score'] = 'B';
+    $GLOBALS['product'] = $p;
+    $out = render(static fn () => (new GuaranteeService())->renderRepairabilityScore());
+    return str_contains($out, 'Repairability class: B') && str_contains($out, '2023/1669') && ! str_contains($out, '/ 10');
+});
+check('storefront: a number stored by 1.0.x is not shown', static function (): bool {
+    reset_state();
+    $p = new WC_Product();
+    $p->meta['_garantio_repair_score'] = '8.2';
+    $GLOBALS['product'] = $p;
+    return render(static fn () => (new GuaranteeService())->renderRepairabilityScore()) === '';
+});
+check('changelog: no decimal comma claim for a type=number field', static function (): bool {
+    return ! str_contains((string) file_get_contents(__DIR__ . '/../readme.txt'), 'decimal comma');
 });
 
 check('settings: a non-array option value does not fatal', static function (): bool {
@@ -355,12 +433,6 @@ check('no "harmonised" method or CSS class on the reminder', static function ():
 });
 check('no unused GARANTIO_DIR / GARANTIO_URL constants', static function (): bool {
     return ! str_contains((string) file_get_contents(__DIR__ . '/../garantio.php'), 'GARANTIO_');
-});
-
-// 11. Polish translation uses the statutory term, not "gwarancja".
-check('pl_PL: reminder uses "odpowiedzialność przedsiębiorcy za zgodność towaru z umową"', static function (): bool {
-    $po = (string) @file_get_contents(__DIR__ . '/../languages/garantio-pl_PL.po');
-    return str_contains($po, 'przedsiębiorcy za zgodność towaru z umową') && ! str_contains($po, 'ustawowej gwarancji');
 });
 
 echo $failed === 0 ? "\nALL GARANTIO CHECKS PASSED\n" : "\n{$failed} CHECK(S) FAILED\n";

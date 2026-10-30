@@ -8,7 +8,7 @@ Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Legal guarantee reminder, durability guarantee note, repairability score badge and a green claims phrase check for WooCommerce product pages.
+Legal guarantee reminder, durability guarantee note, repairability class badge and a green claims phrase check for WooCommerce product pages.
 
 == Description ==
 
@@ -20,8 +20,8 @@ Garantio adds the following to WooCommerce:
 
 * **Legal guarantee reminder**: Shows a text reminder of the legal guarantee of conformity (at least two years, longer where national law provides) on product pages. It is plain text, not the harmonised notice (see the FAQ).
 * **Durability guarantee note**: Shows a text note when you enter a producer commercial durability guarantee longer than two years. It is plain text, not the harmonised label (see the FAQ).
-* **Repairability score**: Shows a repairability score you enter (1.0 to 10.0) as a colour-coded badge.
-* **Green claims check**: Scans product titles, descriptions, short descriptions, attribute values and variation descriptions in the admin and flags phrases such as "climate neutral" or "eco-friendly" (English, Polish, German, Spanish) for you to review. It works in the product editor whether or not the reminder is shown.
+* **Repairability class**: Shows the repairability class (A to E) you enter for a smartphone or slate tablet as a colour-coded badge (see the FAQ).
+* **Green claims check**: Scans product titles, descriptions, short descriptions, attribute values and the descriptions of up to 100 variations in the admin and flags phrases such as "climate neutral" or "eco-friendly" (English, Polish, German, Spanish) for you to review. It works in the product editor whether or not the reminder is shown.
 * **Flexible Display Options**: Position notices under the single product summary (near the price and add-to-cart button) or inside a dedicated "Guarantee & Durability" product tab.
 * **Per-product hide switch**: A checkbox on each product hides the goods reminder, for example on a digital download or a service. It is not set automatically. Article 6(1)(lb) of Directive 2011/83/EU requires a separate reminder for digital content and digital services, which Garantio does not show.
 * **No external calls**: Garantio stores nothing outside your site, makes no external requests and does not touch orders, cart or checkout, so it runs alongside HPOS and the Cart and Checkout Blocks.
@@ -44,7 +44,7 @@ Garantio is fully translatable and ships the `garantio.pot` template. Translatio
 1. Ensure WooCommerce 8.0 or higher is installed and active.
 2. Install Garantio and activate it.
 3. Open WooCommerce > EU Legal Guarantee to configure notice placement and statutory defaults.
-4. Edit products to add producer durability guarantee years (e.g. 3, 5, 10 years), repairability scores, or review green claims auditor alerts.
+4. Edit products to add producer durability guarantee years (e.g. 3, 5, 10 years), repairability classes, or review green claims auditor alerts.
 
 == Frequently Asked Questions ==
 
@@ -61,12 +61,15 @@ Article 6(1)(la) of Directive 2011/83/EU requires the harmonised label of Articl
 Article 10(6) of Directive (EU) 2019/771 lets Member States allow a shorter period for second-hand goods, of not less than one year, when the seller and consumer agree to it. The reminder setting starts at two years, so for such products hide the reminder on the product or write your own text in Custom Notice Override.
 
 = Does Garantio protect against greenwashing penalties? =
-No. The green claims check matches product text against a short list of phrases linked to points 4a and 4c of Annex I to Directive 2005/29/EC (as amended by Directive (EU) 2024/825) and lists them in the product editor for review. A match is not a finding of a breach: point 4c bans climate claims only when based on offsetting, and recital 9 of Directive (EU) 2024/825 says a claim specified in clear terms on the same medium is not a generic environmental claim. No match does not mean the page is compliant either, because only the listed phrases are checked.
+No. The green claims check matches product text against a short list of phrases linked to points 4a and 4c of Annex I to Directive 2005/29/EC (as amended by Directive (EU) 2024/825) and lists them in the product editor for review. A match is not a finding of a breach: point 4c bans climate claims only when based on offsetting, and recital 9 of Directive (EU) 2024/825 says a claim whose specification is provided in clear and prominent terms on the same medium, such as the online selling interface, is not a generic environmental claim. No match does not mean the page is compliant either, because only the listed phrases are checked.
+
+= Which repairability value can I enter? =
+Article 6(1)(u) of Directive 2011/83/EU (as amended by Directive (EU) 2024/825) asks for the reparability score of the goods "where applicable", and Article 2(14d) defines it as a score "based on harmonised requirements established at Union level". For smartphones and slate tablets, Commission Delegated Regulation (EU) 2023/1669 sets a repairability class from A (most repairable) to E (least repairable) on the energy label, applicable from 20 June 2025 (Article 8 and Annex II, Table 4). Garantio takes that class and shows the letter as a badge, not in the official label format. A number entered in Garantio 1.0.x is not shown.
 
 == Screenshots ==
 
-1. Product page on Twenty Twenty-Five: the legal guarantee reminder, the durability guarantee note and the repairability score badge under the price.
-2. Product editor: hide switch for the reminder, commercial durability years, producer name and repairability score.
+1. Product page on Twenty Twenty-Five: the legal guarantee reminder, the durability guarantee note and the repairability badge under the price.
+2. Product editor: hide switch for the reminder, commercial durability years, producer name and repairability field.
 3. Green claims phrase check in the product editor, listing two phrases to review with the Annex I point each relates to.
 4. Settings page under WooCommerce > EU Legal Guarantee.
 
@@ -77,9 +80,10 @@ No. The green claims check matches product text against a short list of phrases 
 * Fixed: switching the reminder off no longer removes the product fields and the green claims check.
 * Fixed: the reminder and durability note are now one English text each, translated through WordPress.org language packs; the built-in Polish, German, Spanish and Romanian texts had no diacritics.
 * Changed: the reminder now says national law may provide a longer period (Article 22a(3) of Directive 2011/83/EU).
-* Fixed: the green claims check now matches Polish, German and Spanish forms with diacritics and inflected endings, and also reads attribute values and variation descriptions.
+* Fixed: the green claims check now matches Polish, German and Spanish forms with diacritics and inflected endings, and also reads attribute values and the descriptions of up to 100 variations (not the products a grouped product lists); the box says when a product has more.
 * Changed: the green claims box lists phrases to review instead of calling them prohibited, and no longer shows an all-clear tick.
-* Fixed: the product tab is not added when it would be empty; a durability of 2 years or less and a repair score below 1 are not stored; a repair score with a decimal comma is read correctly.
+* Fixed: the product tab is not added when it would be empty; a durability of 2 years or less is not stored.
+* Changed: the repairability field takes the repairability class A to E of Delegated Regulation (EU) 2023/1669 (smartphones and slate tablets) instead of a number from 1 to 10, and the badge shows the class; a number saved by 1.0.x is no longer shown.
 * Fixed: uninstall also removes the plugin's product meta.
 * Changed: readme names Implementing Regulation (EU) 2025/1960, which sets the harmonised notice and label and applies from 27 September 2026.
 

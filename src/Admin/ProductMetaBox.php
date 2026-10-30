@@ -50,6 +50,14 @@ final class ProductMetaBox implements HasHooks
 
         $violations = $this->auditor->auditProduct($product);
 
+        $variations = count(GreenClaimsAuditor::variationIds($product));
+        if ($variations > GreenClaimsAuditor::MAX_VARIATIONS) {
+            echo '<p style="margin:0 0 8px;">';
+            /* translators: 1: number of variations checked, 2: number of variations the product has */
+            printf(esc_html__('Only the first %1$d of %2$d variations were checked.', 'garantio'), (int) GreenClaimsAuditor::MAX_VARIATIONS, (int) $variations);
+            echo '</p>';
+        }
+
         if (empty($violations)) {
             echo '<p style="margin:0;">';
             echo esc_html__('None of the checked phrases found. This check looks for a short list of phrases only and does not assess other environmental claims.', 'garantio');
@@ -67,7 +75,7 @@ final class ProductMetaBox implements HasHooks
             echo '</li>';
         }
         echo '</ul>';
-        echo '<p style="margin:6px 0 0; font-size:12px;">' . esc_html__('A match is not a breach in itself. Point 4a does not apply when you can show recognised excellent environmental performance relevant to the claim, or when the claim is specified in clear terms on the same page (recital 9 of Directive (EU) 2024/825). Point 4c covers climate claims based on offsetting.', 'garantio') . '</p>';
+        echo '<p style="margin:6px 0 0; font-size:12px;">' . esc_html__('A match is not a breach in itself. Point 4a does not apply when you can show recognised excellent environmental performance relevant to the claim, or when the claim is specified in clear and prominent terms on the same medium, such as the online selling interface (recital 9 of Directive (EU) 2024/825). Point 4c covers climate claims based on offsetting.', 'garantio') . '</p>';
         echo '</div>';
     }
 
@@ -100,13 +108,19 @@ final class ProductMetaBox implements HasHooks
             'desc_tip' => true,
         ]);
 
-        woocommerce_wp_text_input([
+        woocommerce_wp_select([
             'id' => GuaranteeService::META_REPAIR_SCORE,
-            'label' => __('Repairability Score (1.0 - 10.0)', 'garantio'),
-            'description' => __('The reparability score as provided by the producer, where one is established at Union level (Article 6(1)(u) of Directive 2011/83/EU). Garantio shows the number as a badge, not in any official label format.', 'garantio'),
+            'label' => __('Repairability Class (A - E)', 'garantio'),
+            'description' => __('Repairability class from the energy label of a smartphone or slate tablet (Delegated Regulation (EU) 2023/1669, from 20 June 2025). Article 6(1)(u) of Directive 2011/83/EU asks for the reparability score where one is established at Union level. Garantio shows the class as a badge, not in the official label format.', 'garantio'),
             'desc_tip' => true,
-            'type' => 'number',
-            'custom_attributes' => ['min' => '1.0', 'max' => '10.0', 'step' => '0.1'],
+            'options' => [
+                '' => __('None', 'garantio'),
+                'A' => 'A',
+                'B' => 'B',
+                'C' => 'C',
+                'D' => 'D',
+                'E' => 'E',
+            ],
         ]);
 
         echo '</div>';
@@ -133,7 +147,7 @@ final class ProductMetaBox implements HasHooks
         $exempt   = isset($_POST[GuaranteeService::META_EXEMPT_GUARANTEE]) ? 'yes' : 'no';
         $years    = isset($_POST[GuaranteeService::META_DURABILITY_YEARS]) ? absint(wp_unslash($_POST[GuaranteeService::META_DURABILITY_YEARS])) : 0;
         $producer = isset($_POST[GuaranteeService::META_DURABILITY_PRODUCER]) ? sanitize_text_field(wp_unslash($_POST[GuaranteeService::META_DURABILITY_PRODUCER])) : '';
-        $repair   = isset($_POST[GuaranteeService::META_REPAIR_SCORE]) ? self::parseScore(sanitize_text_field(wp_unslash($_POST[GuaranteeService::META_REPAIR_SCORE]))) : '';
+        $repair   = isset($_POST[GuaranteeService::META_REPAIR_SCORE]) ? self::parseClass(sanitize_text_field(wp_unslash($_POST[GuaranteeService::META_REPAIR_SCORE]))) : '';
 
         $product->update_meta_data(GuaranteeService::META_EXEMPT_GUARANTEE, $exempt);
         $product->update_meta_data(GuaranteeService::META_DURABILITY_YEARS, $years > 2 ? $years : '');
@@ -143,17 +157,12 @@ final class ProductMetaBox implements HasHooks
     }
 
     /**
-     * Accepts a decimal comma ("7,5"); blank or out of the 1 to 10 range stores nothing.
+     * Repairability class A to E (Annex II, Table 4, of Delegated Regulation (EU) 2023/1669); anything else stores nothing.
      */
-    public static function parseScore(string $raw): string
+    public static function parseClass(string $raw): string
     {
-        $raw = trim(str_replace(',', '.', $raw));
-        if (! is_numeric($raw)) {
-            return '';
-        }
+        $class = strtoupper(trim($raw));
 
-        $score = round((float) $raw, 1);
-
-        return ($score >= 1.0 && $score <= 10.0) ? (string) $score : '';
+        return in_array($class, GuaranteeService::REPAIR_CLASSES, true) ? $class : '';
     }
 }

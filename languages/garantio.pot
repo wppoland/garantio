@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-30T14:14:59+00:00\n"
+"POT-Creation-Date: 2026-10-30T14:40:29+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: garantio\n"
@@ -47,52 +47,62 @@ msgstr ""
 msgid "Green Claims Phrase Check"
 msgstr ""
 
-#: src/Admin/ProductMetaBox.php:55
+#. translators: 1: number of variations checked, 2: number of variations the product has
+#: src/Admin/ProductMetaBox.php:57
+#, php-format
+msgid "Only the first %1$d of %2$d variations were checked."
+msgstr ""
+
+#: src/Admin/ProductMetaBox.php:63
 msgid "None of the checked phrases found. This check looks for a short list of phrases only and does not assess other environmental claims."
 msgstr ""
 
-#: src/Admin/ProductMetaBox.php:61
+#: src/Admin/ProductMetaBox.php:69
 msgid "Phrases to review:"
 msgstr ""
 
-#: src/Admin/ProductMetaBox.php:70
-msgid "A match is not a breach in itself. Point 4a does not apply when you can show recognised excellent environmental performance relevant to the claim, or when the claim is specified in clear terms on the same page (recital 9 of Directive (EU) 2024/825). Point 4c covers climate claims based on offsetting."
+#: src/Admin/ProductMetaBox.php:78
+msgid "A match is not a breach in itself. Point 4a does not apply when you can show recognised excellent environmental performance relevant to the claim, or when the claim is specified in clear and prominent terms on the same medium, such as the online selling interface (recital 9 of Directive (EU) 2024/825). Point 4c covers climate claims based on offsetting."
 msgstr ""
 
-#: src/Admin/ProductMetaBox.php:79
+#: src/Admin/ProductMetaBox.php:87
 msgid "EU Legal Guarantee & Durability (Article 6(1)(l), (la) and (u) of Directive 2011/83/EU)"
 msgstr ""
 
-#: src/Admin/ProductMetaBox.php:83
+#: src/Admin/ProductMetaBox.php:91
 msgid "Hide guarantee reminder"
 msgstr ""
 
-#: src/Admin/ProductMetaBox.php:84
+#: src/Admin/ProductMetaBox.php:92
 msgid "Hide the goods legal guarantee reminder on this product, for example a digital download or a service. Article 6(1)(lb) of Directive 2011/83/EU requires a separate reminder for digital content and digital services, which Garantio does not show."
 msgstr ""
 
-#: src/Admin/ProductMetaBox.php:89
+#: src/Admin/ProductMetaBox.php:97
 msgid "Commercial Durability (Years)"
 msgstr ""
 
-#: src/Admin/ProductMetaBox.php:90
+#: src/Admin/ProductMetaBox.php:98
 msgid "Only if the producer offers a commercial guarantee of durability at no extra cost for more than 2 years (e.g. 3, 5, 10). Values of 2 or less are not saved."
 msgstr ""
 
-#: src/Admin/ProductMetaBox.php:98
+#: src/Admin/ProductMetaBox.php:106
 msgid "Producer / Brand Name"
 msgstr ""
 
-#: src/Admin/ProductMetaBox.php:99
+#: src/Admin/ProductMetaBox.php:107
 msgid "Name of the manufacturer offering the commercial durability guarantee."
 msgstr ""
 
-#: src/Admin/ProductMetaBox.php:105
-msgid "Repairability Score (1.0 - 10.0)"
+#: src/Admin/ProductMetaBox.php:113
+msgid "Repairability Class (A - E)"
 msgstr ""
 
-#: src/Admin/ProductMetaBox.php:106
-msgid "The reparability score as provided by the producer, where one is established at Union level (Article 6(1)(u) of Directive 2011/83/EU). Garantio shows the number as a badge, not in any official label format."
+#: src/Admin/ProductMetaBox.php:114
+msgid "Repairability class from the energy label of a smartphone or slate tablet (Delegated Regulation (EU) 2023/1669, from 20 June 2025). Article 6(1)(u) of Directive 2011/83/EU asks for the reparability score where one is established at Union level. Garantio shows the class as a badge, not in the official label format."
+msgstr ""
+
+#: src/Admin/ProductMetaBox.php:117
+msgid "None"
 msgstr ""
 
 #: src/Admin/SettingsPage.php:29
@@ -116,7 +126,7 @@ msgid "Enable legal guarantee reminder"
 msgstr ""
 
 #: src/Admin/SettingsPage.php:85
-msgid "Display the legal guarantee reminder, durability note and repairability score on product pages"
+msgid "Display the legal guarantee reminder, durability note and repairability class on product pages"
 msgstr ""
 
 #: src/Admin/SettingsPage.php:90
@@ -152,11 +162,11 @@ msgid "Banned when the neutral, reduced or positive greenhouse gas impact is bas
 msgstr ""
 
 #: src/Model/GreenClaimsRules.php:33
-msgid "A generic environmental claim is banned unless you can show recognised excellent environmental performance relevant to it, or the claim is specified in clear terms on the same page."
+msgid "A generic environmental claim is banned unless you can show recognised excellent environmental performance relevant to it, or the claim is specified in clear and prominent terms on the same medium (recital 9 of Directive (EU) 2024/825)."
 msgstr ""
 
 #: src/Model/GreenClaimsRules.php:39
-msgid "A generic biodegradability claim is banned unless you can show recognised excellent environmental performance relevant to it, or the claim is specified in clear terms on the same page."
+msgid "A generic biodegradability claim is banned unless you can show recognised excellent environmental performance relevant to it, or the claim is specified in clear and prominent terms on the same medium (recital 9 of Directive (EU) 2024/825)."
 msgstr ""
 
 #: src/Model/GreenClaimsRules.php:45
@@ -177,24 +187,24 @@ msgstr[1] ""
 msgid "%1$s offers a %2$d-year commercial guarantee of durability at no extra cost."
 msgstr ""
 
-#: src/Service/GuaranteeService.php:97
+#: src/Service/GuaranteeService.php:100
 msgid "EU Statutory Legal Guarantee"
 msgstr ""
 
-#: src/Service/GuaranteeService.php:118
+#: src/Service/GuaranteeService.php:121
 msgid "The manufacturer"
 msgstr ""
 
-#: src/Service/GuaranteeService.php:123
+#: src/Service/GuaranteeService.php:126
 msgid "Durability Guarantee:"
 msgstr ""
 
-#. translators: %s: numeric score out of 10
-#: src/Service/GuaranteeService.php:154
+#. translators: %s: repairability class letter, A (most repairable) to E (least repairable)
+#: src/Service/GuaranteeService.php:156
 #, php-format
-msgid "Repairability Index: %s / 10"
+msgid "Repairability class: %s (A to E, Regulation (EU) 2023/1669)"
 msgstr ""
 
-#: src/Service/GuaranteeService.php:171
+#: src/Service/GuaranteeService.php:173
 msgid "Guarantee & Durability"
 msgstr ""

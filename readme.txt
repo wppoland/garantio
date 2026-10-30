@@ -4,7 +4,7 @@ Tags: woocommerce, guarantee, legal guarantee, repairability, green claims
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,6 +61,9 @@ Article 6(1)(la) of Directive 2011/83/EU requires the harmonised label of Articl
 No. The green claims check matches product text against a short list of phrases linked to points 4a and 4c of Annex I to Directive 2005/29/EC (as amended by Directive (EU) 2024/825) and warns you in the product editor. Whether a claim is allowed depends on what you can show for it.
 
 == Changelog ==
+
+= 1.0.3 =
+* Fixed: deleting the plugin on a multisite network now removes its settings from every site, not only the main one.
 
 = 1.0.2 =
 * Changed: display name is now "Garantio - EU Legal Guarantee Notice for WooCommerce". The old name suggested the plugin shows the harmonised notice of Article 22a of Directive 2011/83/EU; it shows its own text reminder.

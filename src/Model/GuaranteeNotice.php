@@ -22,7 +22,12 @@ final class GuaranteeNotice
     {
         return sprintf(
             /* translators: %d: legal guarantee duration in years (default 2) */
-            __('You are entitled by law to a legal guarantee of conformity from the seller, free of charge, for at least %d years. National law may provide a longer period.', 'garantio'),
+            _n(
+                'You are entitled by law to a legal guarantee of conformity from the seller, free of charge, for at least %d year. National law may provide a longer period.',
+                'You are entitled by law to a legal guarantee of conformity from the seller, free of charge, for at least %d years. National law may provide a longer period.',
+                $years,
+                'garantio'
+            ),
             $years
         );
     }

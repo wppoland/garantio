@@ -63,6 +63,13 @@ Article 10(6) of Directive (EU) 2019/771 lets Member States allow a shorter peri
 = Does Garantio protect against greenwashing penalties? =
 No. The green claims check matches product text against a short list of phrases linked to points 4a and 4c of Annex I to Directive 2005/29/EC (as amended by Directive (EU) 2024/825) and lists them in the product editor for review. A match is not a finding of a breach: point 4c bans climate claims only when based on offsetting, and recital 9 of Directive (EU) 2024/825 says a claim specified in clear terms on the same medium is not a generic environmental claim. No match does not mean the page is compliant either, because only the listed phrases are checked.
 
+== Screenshots ==
+
+1. Product page on Twenty Twenty-Five: the legal guarantee reminder, the durability guarantee note and the repairability score badge under the price.
+2. Product editor: hide switch for the reminder, commercial durability years, producer name and repairability score.
+3. Green claims phrase check in the product editor, listing two phrases to review with the Annex I point each relates to.
+4. Settings page under WooCommerce > EU Legal Guarantee.
+
 == Changelog ==
 
 = 1.1.0 =

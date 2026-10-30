@@ -67,7 +67,7 @@ final class ProductMetaBox implements HasHooks
             echo '</li>';
         }
         echo '</ul>';
-        echo '<p style="margin:6px 0 0; font-size:12px;">' . esc_html__('A phrase is not banned in itself. It is allowed when you can show recognised excellent environmental performance, or when the claim is specified in clear terms on the same page (recital 9 of Directive (EU) 2024/825). Climate claims are banned when based on offsetting (point 4c).', 'garantio') . '</p>';
+        echo '<p style="margin:6px 0 0; font-size:12px;">' . esc_html__('A match is not a breach in itself. Point 4a does not apply when you can show recognised excellent environmental performance relevant to the claim, or when the claim is specified in clear terms on the same page (recital 9 of Directive (EU) 2024/825). Point 4c covers climate claims based on offsetting.', 'garantio') . '</p>';
         echo '</div>';
     }
 

@@ -84,7 +84,7 @@ final class ProductMetaBox implements HasHooks
         wp_nonce_field('garantio_save_product_fields', 'garantio_product_nonce');
 
         echo '<div class="options_group garantio-options-group">';
-        echo '<h4 style="padding-left:12px;">' . esc_html__('EU Legal Guarantee & Durability (Article 6(1)(l), (la) and (u) of Directive 2011/83/EU)', 'garantio') . '</h4>';
+        echo '<h4 style="padding-left:12px;">' . esc_html__('EU Legal Guarantee & Durability (Article 6(1)(l) and (la) of Directive 2011/83/EU)', 'garantio') . '</h4>';
 
         woocommerce_wp_checkbox([
             'id' => GuaranteeService::META_EXEMPT_GUARANTEE,
@@ -111,7 +111,7 @@ final class ProductMetaBox implements HasHooks
         woocommerce_wp_select([
             'id' => GuaranteeService::META_REPAIR_SCORE,
             'label' => __('Repairability Class (A - E)', 'garantio'),
-            'description' => __('Repairability class from the energy label of a smartphone or slate tablet (Delegated Regulation (EU) 2023/1669, from 20 June 2025). Article 6(1)(u) of Directive 2011/83/EU asks for the reparability score where one is established at Union level. Garantio shows the class as a badge, not in the official label format.', 'garantio'),
+            'description' => __('Repairability class from the energy label of a smartphone or slate tablet under Delegated Regulation (EU) 2023/1669, from 20 June 2025. Article 1 excludes phones and tablets with a main display the user can roll up or unroll, and smartphones for high security communication. Leave it empty for every other product. Garantio shows the class as a badge, not in the official label format.', 'garantio'),
             'desc_tip' => true,
             'options' => [
                 '' => __('None', 'garantio'),

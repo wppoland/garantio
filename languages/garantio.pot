@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-30T14:40:29+00:00\n"
+"POT-Creation-Date: 2026-10-30T14:53:03+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: garantio\n"
@@ -26,7 +26,7 @@ msgstr ""
 
 #. Description of the plugin
 #: garantio.php
-msgid "Legal guarantee reminder, durability guarantee note, repairability score badge and a green claims phrase check for WooCommerce product pages."
+msgid "Legal guarantee reminder, durability guarantee note, repairability class badge and a green claims phrase check for WooCommerce product pages."
 msgstr ""
 
 #. Author of the plugin
@@ -66,7 +66,7 @@ msgid "A match is not a breach in itself. Point 4a does not apply when you can s
 msgstr ""
 
 #: src/Admin/ProductMetaBox.php:87
-msgid "EU Legal Guarantee & Durability (Article 6(1)(l), (la) and (u) of Directive 2011/83/EU)"
+msgid "EU Legal Guarantee & Durability (Article 6(1)(l) and (la) of Directive 2011/83/EU)"
 msgstr ""
 
 #: src/Admin/ProductMetaBox.php:91
@@ -98,7 +98,7 @@ msgid "Repairability Class (A - E)"
 msgstr ""
 
 #: src/Admin/ProductMetaBox.php:114
-msgid "Repairability class from the energy label of a smartphone or slate tablet (Delegated Regulation (EU) 2023/1669, from 20 June 2025). Article 6(1)(u) of Directive 2011/83/EU asks for the reparability score where one is established at Union level. Garantio shows the class as a badge, not in the official label format."
+msgid "Repairability class from the energy label of a smartphone or slate tablet under Delegated Regulation (EU) 2023/1669, from 20 June 2025. Article 1 excludes phones and tablets with a main display the user can roll up or unroll, and smartphones for high security communication. Leave it empty for every other product. Garantio shows the class as a badge, not in the official label format."
 msgstr ""
 
 #: src/Admin/ProductMetaBox.php:117

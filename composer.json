@@ -1,6 +1,6 @@
 {
     "name": "wppoland/garantio",
-    "description": "Legal guarantee reminder, durability guarantee note, repairability score badge and green claims phrase check for WooCommerce (Directive (EU) 2024/825).",
+    "description": "Legal guarantee reminder, durability guarantee note, repairability class badge and green claims phrase check for WooCommerce (Directive (EU) 2024/825).",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
     "require": {

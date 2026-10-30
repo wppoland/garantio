@@ -415,6 +415,29 @@ check('storefront: a number stored by 1.0.x is not shown', static function (): b
 check('changelog: no decimal comma claim for a type=number field', static function (): bool {
     return ! str_contains((string) file_get_contents(__DIR__ . '/../readme.txt'), 'decimal comma');
 });
+check('repairability: field, heading and FAQ do not tie the 2023/1669 class to Article 6(1)(u); they name the Art. 1 exclusions', static function (): bool {
+    reset_state();
+    $html = render(static fn () => (new ProductMetaBox(new GuaranteeService()))->renderProductFields());
+    $desc = (string) ($GLOBALS['fields']['_garantio_repair_score']['description'] ?? '');
+    $readme = (string) file_get_contents(__DIR__ . '/../readme.txt');
+    $faq = substr($readme, (int) strpos($readme, '= Which repairability value'), 900);
+    foreach ([$desc, $faq] as $text) {
+        if (str_contains($text, '6(1)(u)') || ! str_contains($text, 'high security') || ! str_contains($text, 'roll')) {
+            return false;
+        }
+    }
+    return ! str_contains($html, '(u)');
+});
+check('description: plugin header and composer.json say "repairability class", not "score"', static function (): bool {
+    $header = (string) file_get_contents(__DIR__ . '/../garantio.php');
+    $composer = (string) file_get_contents(__DIR__ . '/../composer.json');
+    return str_contains($header, 'repairability class badge') && str_contains($composer, 'repairability class badge')
+        && ! str_contains($header . $composer, 'repairability score');
+});
+check('blueprint: the demo product with a repairability class is a smartphone or slate tablet', static function (): bool {
+    $bp = (string) file_get_contents(__DIR__ . '/../.wordpress-org/blueprints/blueprint.json');
+    return ! str_contains($bp, '_garantio_repair_score') || (bool) preg_match('/set_name\(\'[^\']*(Smartphone|Tablet)/i', $bp);
+});
 
 check('settings: a non-array option value does not fatal', static function (): bool {
     reset_state();

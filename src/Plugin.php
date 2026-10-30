@@ -33,7 +33,7 @@ final class Plugin
     private function __construct()
     {
         $this->guaranteeService = new GuaranteeService();
-        $this->productMetaBox   = new ProductMetaBox($this->guaranteeService);
+        $this->productMetaBox   = new ProductMetaBox();
         $this->settingsPage     = new SettingsPage();
     }
 
@@ -42,10 +42,5 @@ final class Plugin
         $this->guaranteeService->registerHooks();
         $this->productMetaBox->registerHooks();
         $this->settingsPage->registerHooks();
-    }
-
-    public function getGuaranteeService(): GuaranteeService
-    {
-        return $this->guaranteeService;
     }
 }

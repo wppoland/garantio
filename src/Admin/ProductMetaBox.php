@@ -17,17 +17,13 @@ final class ProductMetaBox implements HasHooks
 {
     private GreenClaimsAuditor $auditor;
 
-    public function __construct(private GuaranteeService $guaranteeService)
+    public function __construct()
     {
         $this->auditor = new GreenClaimsAuditor();
     }
 
     public function registerHooks(): void
     {
-        if (! $this->guaranteeService->isEnabled()) {
-            return;
-        }
-
         add_action('woocommerce_product_options_general_product_data', [$this, 'renderProductFields']);
         add_action('woocommerce_process_product_meta', [$this, 'saveProductFields']);
         add_action('add_meta_boxes', [$this, 'registerGreenClaimsBox']);
@@ -37,7 +33,7 @@ final class ProductMetaBox implements HasHooks
     {
         add_meta_box(
             'garantio_green_claims',
-            __('Green Claims Compliance Check (Directive (EU) 2024/825)', 'garantio'),
+            __('Green Claims Phrase Check', 'garantio'),
             [$this, 'renderGreenClaimsBox'],
             'product',
             'side',
@@ -54,15 +50,23 @@ final class ProductMetaBox implements HasHooks
 
         $violations = $this->auditor->auditProduct($product);
 
+        $variations = count(GreenClaimsAuditor::variationIds($product));
+        if ($variations > GreenClaimsAuditor::MAX_VARIATIONS) {
+            echo '<p style="margin:0 0 8px;">';
+            /* translators: 1: number of variations checked, 2: number of variations the product has */
+            printf(esc_html__('Only the first %1$d of %2$d variations were checked.', 'garantio'), (int) GreenClaimsAuditor::MAX_VARIATIONS, (int) $variations);
+            echo '</p>';
+        }
+
         if (empty($violations)) {
-            echo '<p style="color:#16a34a; margin:0;">';
-            echo '&#10004; ' . esc_html__('No prohibited generic green claims detected.', 'garantio');
+            echo '<p style="margin:0;">';
+            echo esc_html__('None of the checked phrases found. This check looks for a short list of phrases only and does not assess other environmental claims.', 'garantio');
             echo '</p>';
             return;
         }
 
         echo '<div style="background:#fef2f2; border-left:4px solid #dc2626; padding:8px 10px; margin-bottom:8px;">';
-        echo '<strong style="color:#991b1b;">' . esc_html__('Risky Green Claims Detected:', 'garantio') . '</strong>';
+        echo '<strong style="color:#991b1b;">' . esc_html__('Phrases to review:', 'garantio') . '</strong>';
         echo '<ul style="margin:6px 0 0 16px; padding:0; list-style:disc; font-size:12px; color:#7f1d1d;">';
         foreach ($violations as $v) {
             echo '<li>';
@@ -71,6 +75,7 @@ final class ProductMetaBox implements HasHooks
             echo '</li>';
         }
         echo '</ul>';
+        echo '<p style="margin:6px 0 0; font-size:12px;">' . esc_html__('A match is not a breach in itself. Point 4a does not apply when you can show recognised excellent environmental performance relevant to the claim, or when the claim is specified in clear and prominent terms on the same medium, such as the online selling interface (recital 9 of Directive (EU) 2024/825). Point 4c covers climate claims based on offsetting.', 'garantio') . '</p>';
         echo '</div>';
     }
 
@@ -79,21 +84,21 @@ final class ProductMetaBox implements HasHooks
         wp_nonce_field('garantio_save_product_fields', 'garantio_product_nonce');
 
         echo '<div class="options_group garantio-options-group">';
-        echo '<h4 style="padding-left:12px;">' . esc_html__('EU Legal Guarantee & Durability (Directive 2024/825)', 'garantio') . '</h4>';
+        echo '<h4 style="padding-left:12px;">' . esc_html__('EU Legal Guarantee & Durability (Article 6(1)(l) and (la) of Directive 2011/83/EU)', 'garantio') . '</h4>';
 
         woocommerce_wp_checkbox([
             'id' => GuaranteeService::META_EXEMPT_GUARANTEE,
-            'label' => __('Exempt Product', 'garantio'),
-            'description' => __('Exempt digital downloads, services, or non-goods from statutory guarantee notice.', 'garantio'),
+            'label' => __('Hide guarantee reminder', 'garantio'),
+            'description' => __('Hide the goods legal guarantee reminder on this product, for example a digital download or a service. Article 6(1)(lb) of Directive 2011/83/EU requires a separate reminder for digital content and digital services, which Garantio does not show.', 'garantio'),
         ]);
 
         woocommerce_wp_text_input([
             'id' => GuaranteeService::META_DURABILITY_YEARS,
             'label' => __('Commercial Durability (Years)', 'garantio'),
-            'description' => __('If the producer provides a commercial durability guarantee at no extra cost exceeding 2 years (e.g. 3, 5, 10).', 'garantio'),
+            'description' => __('Only if the producer offers a commercial guarantee of durability at no extra cost for more than 2 years (e.g. 3, 5, 10). Values of 2 or less are not saved.', 'garantio'),
             'desc_tip' => true,
             'type' => 'number',
-            'custom_attributes' => ['min' => '0', 'step' => '1'],
+            'custom_attributes' => ['min' => '3', 'step' => '1'],
         ]);
 
         woocommerce_wp_text_input([
@@ -103,13 +108,19 @@ final class ProductMetaBox implements HasHooks
             'desc_tip' => true,
         ]);
 
-        woocommerce_wp_text_input([
+        woocommerce_wp_select([
             'id' => GuaranteeService::META_REPAIR_SCORE,
-            'label' => __('Repairability Score (1.0 - 10.0)', 'garantio'),
-            'description' => __('Official repairability index or score where available under EU or national rules.', 'garantio'),
+            'label' => __('Repairability Class (A - E)', 'garantio'),
+            'description' => __('Repairability class from the energy label of a smartphone or slate tablet under Delegated Regulation (EU) 2023/1669, from 20 June 2025. Article 1 excludes phones and tablets with a main display the user can roll up or unroll, and smartphones for high security communication. Leave it empty for every other product. Garantio shows the class as a badge, not in the official label format.', 'garantio'),
             'desc_tip' => true,
-            'type' => 'number',
-            'custom_attributes' => ['min' => '0.0', 'max' => '10.0', 'step' => '0.1'],
+            'options' => [
+                '' => __('None', 'garantio'),
+                'A' => 'A',
+                'B' => 'B',
+                'C' => 'C',
+                'D' => 'D',
+                'E' => 'E',
+            ],
         ]);
 
         echo '</div>';
@@ -134,16 +145,24 @@ final class ProductMetaBox implements HasHooks
         }
 
         $exempt   = isset($_POST[GuaranteeService::META_EXEMPT_GUARANTEE]) ? 'yes' : 'no';
-        $years    = isset($_POST[GuaranteeService::META_DURABILITY_YEARS]) ? max(0, absint(wp_unslash($_POST[GuaranteeService::META_DURABILITY_YEARS]))) : 0;
+        $years    = isset($_POST[GuaranteeService::META_DURABILITY_YEARS]) ? absint(wp_unslash($_POST[GuaranteeService::META_DURABILITY_YEARS])) : 0;
         $producer = isset($_POST[GuaranteeService::META_DURABILITY_PRODUCER]) ? sanitize_text_field(wp_unslash($_POST[GuaranteeService::META_DURABILITY_PRODUCER])) : '';
-        $repair   = isset($_POST[GuaranteeService::META_REPAIR_SCORE]) && '' !== $_POST[GuaranteeService::META_REPAIR_SCORE]
-            ? min(10.0, max(0.0, (float) sanitize_text_field(wp_unslash($_POST[GuaranteeService::META_REPAIR_SCORE]))))
-            : '';
+        $repair   = isset($_POST[GuaranteeService::META_REPAIR_SCORE]) ? self::parseClass(sanitize_text_field(wp_unslash($_POST[GuaranteeService::META_REPAIR_SCORE]))) : '';
 
         $product->update_meta_data(GuaranteeService::META_EXEMPT_GUARANTEE, $exempt);
-        $product->update_meta_data(GuaranteeService::META_DURABILITY_YEARS, $years > 0 ? $years : '');
+        $product->update_meta_data(GuaranteeService::META_DURABILITY_YEARS, $years > 2 ? $years : '');
         $product->update_meta_data(GuaranteeService::META_DURABILITY_PRODUCER, $producer);
-        $product->update_meta_data(GuaranteeService::META_REPAIR_SCORE, $repair !== '' ? (string) $repair : '');
+        $product->update_meta_data(GuaranteeService::META_REPAIR_SCORE, $repair);
         $product->save_meta_data();
+    }
+
+    /**
+     * Repairability class A to E (Annex II, Table 4, of Delegated Regulation (EU) 2023/1669); anything else stores nothing.
+     */
+    public static function parseClass(string $raw): string
+    {
+        $class = strtoupper(trim($raw));
+
+        return in_array($class, GuaranteeService::REPAIR_CLASSES, true) ? $class : '';
     }
 }

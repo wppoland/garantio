@@ -1,6 +1,6 @@
 {
     "name": "wppoland/garantio",
-    "description": "Legal guarantee reminder, durability guarantee note, repairability score badge and green claims phrase check for WooCommerce (Directive (EU) 2024/825).",
+    "description": "Legal guarantee reminder, durability guarantee note, repairability class badge and green claims phrase check for WooCommerce (Directive (EU) 2024/825).",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
     "require": {
@@ -22,7 +22,7 @@
         "cs": "phpcs --standard=phpcs.xml.dist",
         "cs:fix": "phpcbf --standard=phpcs.xml.dist",
         "analyse": "phpstan analyse -c phpstan.neon.dist --memory-limit=2G",
-        "test": "php tests/guarantee-notice-check.php"
+        "test": "php tests/guarantee-notice-check.php && php tests/uninstall-multisite-check.php"
     },
     "config": {
         "allow-plugins": {

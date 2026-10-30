@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       Garantio - EU Legal Guarantee Notice for WooCommerce
  * Plugin URI:        https://plogins.com/garantio/
- * Description:       Legal guarantee reminder, commercial durability guarantee note, repairability score badge and a green claims phrase check for WooCommerce product pages.
- * Version:           1.0.3
+ * Description:       Legal guarantee reminder, durability guarantee note, repairability class badge and a green claims phrase check for WooCommerce product pages.
+ * Version:           1.1.0
  * Requires at least: 6.5
  * Requires PHP:      8.1
  * Requires Plugins:  woocommerce
@@ -25,11 +25,8 @@ namespace Garantio;
 
 defined('ABSPATH') || exit;
 
-const VERSION     = '1.0.3';
+const VERSION     = '1.1.0';
 const PLUGIN_FILE = __FILE__;
-
-define('GARANTIO_DIR', plugin_dir_path(__FILE__));
-define('GARANTIO_URL', plugin_dir_url(__FILE__));
 
 require_once __DIR__ . '/autoload.php';
 

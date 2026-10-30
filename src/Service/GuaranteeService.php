@@ -10,7 +10,7 @@ use Garantio\Model\GuaranteeNotice;
 defined('ABSPATH') || exit;
 
 /**
- * Renders the legal guarantee reminder, durability guarantee note and repairability score on product pages.
+ * Renders the legal guarantee reminder, durability guarantee note and repairability class on product pages.
  */
 final class GuaranteeService implements HasHooks
 {
@@ -18,8 +18,11 @@ final class GuaranteeService implements HasHooks
 
     public const META_DURABILITY_YEARS  = '_garantio_durability_years';
     public const META_DURABILITY_PRODUCER = '_garantio_durability_producer';
-    public const META_REPAIR_SCORE      = '_garantio_repair_score'; // 1.0 to 10.0
+    public const META_REPAIR_SCORE      = '_garantio_repair_score'; // repairability class A to E
     public const META_EXEMPT_GUARANTEE  = '_garantio_exempt_guarantee'; // e.g. digital goods / services
+
+    /** Repairability classes of Delegated Regulation (EU) 2023/1669, Annex II, Table 4. */
+    public const REPAIR_CLASSES = ['A', 'B', 'C', 'D', 'E'];
 
     /**
      * @var array<string, mixed>
@@ -28,8 +31,34 @@ final class GuaranteeService implements HasHooks
 
     public function __construct()
     {
-        $raw            = get_option(self::OPTION, []);
-        $this->settings = is_array($raw) ? $raw : [];
+        $this->settings = self::settings();
+    }
+
+    /**
+     * Defaults apply until the merchant first saves the settings page.
+     *
+     * @return array<string, string>
+     */
+    public static function defaults(): array
+    {
+        return [
+            'enabled'         => '1',
+            'statutory_years' => (string) GuaranteeNotice::DEFAULT_STATUTORY_YEARS,
+            'notice_position' => 'single_summary',
+            'custom_notice'   => '',
+        ];
+    }
+
+    /**
+     * Stored settings over the defaults.
+     *
+     * @return array<string, mixed>
+     */
+    public static function settings(): array
+    {
+        $raw = get_option(self::OPTION, []);
+
+        return array_merge(self::defaults(), is_array($raw) ? $raw : []);
     }
 
     public function isEnabled(): bool
@@ -46,7 +75,7 @@ final class GuaranteeService implements HasHooks
         $position = (string) ($this->settings['notice_position'] ?? 'single_summary');
 
         if ($position === 'single_summary') {
-            add_action('woocommerce_single_product_summary', [$this, 'renderHarmonisedNotice'], 25);
+            add_action('woocommerce_single_product_summary', [$this, 'renderGuaranteeReminder'], 25);
             add_action('woocommerce_single_product_summary', [$this, 'renderDurabilityLabel'], 26);
             add_action('woocommerce_single_product_summary', [$this, 'renderRepairabilityScore'], 27);
         } else {
@@ -55,29 +84,19 @@ final class GuaranteeService implements HasHooks
     }
 
     /**
-     * Render the legal guarantee reminder (Directive 2011/83/EU art. 6(1)(l)); plain text, not the art. 22a harmonised notice.
+     * Render the legal guarantee reminder (Directive 2011/83/EU art. 6(1)(l)); plain text, not the harmonised notice of Implementing Regulation (EU) 2025/1960.
      */
-    public function renderHarmonisedNotice(): void
+    public function renderGuaranteeReminder(): void
     {
         global $product;
-        if (! $product instanceof \WC_Product) {
+        if (! $product instanceof \WC_Product || ! $this->showsReminder($product)) {
             return;
         }
 
-        // Exempt digital goods / services if configured
-        if ($product->get_meta(self::META_EXEMPT_GUARANTEE, true) === 'yes') {
-            return;
-        }
+        $custom = trim((string) $this->settings['custom_notice']);
+        $text   = $custom !== '' ? $custom : GuaranteeNotice::reminder((int) $this->settings['statutory_years']);
 
-        $years    = (int) ($this->settings['statutory_years'] ?? GuaranteeNotice::DEFAULT_STATUTORY_YEARS);
-        $locale   = substr(determine_locale(), 0, 2);
-        $notices  = GuaranteeNotice::defaultNotices();
-        $template = $notices[$locale] ?? $notices['en'];
-
-        $custom = trim((string) ($this->settings['custom_notice'] ?? ''));
-        $text   = $custom !== '' ? $custom : sprintf($template, $years);
-
-        echo '<div class="garantio-harmonised-notice" style="margin: 12px 0; padding: 10px 14px; background: #f0fdf4; border-left: 4px solid #16a34a; border-radius: 2px; font-size: 0.9em; color: #166534;">';
+        echo '<div class="garantio-guarantee-reminder" style="margin: 12px 0; padding: 10px 14px; background: #f0fdf4; border-left: 4px solid #16a34a; border-radius: 2px; font-size: 0.9em; color: #166534;">';
         echo '<strong style="display:block; margin-bottom: 2px;">' . esc_html__('EU Statutory Legal Guarantee', 'garantio') . '</strong>';
         echo '<p style="margin:0;">' . esc_html($text) . '</p>';
         echo '</div>';
@@ -93,18 +112,15 @@ final class GuaranteeService implements HasHooks
             return;
         }
 
-        $years = (int) $product->get_meta(self::META_DURABILITY_YEARS, true);
-        if ($years <= 2) {
+        $years = self::durabilityYears($product);
+        if ($years === 0) {
             return;
         }
 
         $producer = trim((string) $product->get_meta(self::META_DURABILITY_PRODUCER, true));
         $producer = $producer !== '' ? $producer : __('The manufacturer', 'garantio');
 
-        $locale    = substr(determine_locale(), 0, 2);
-        $labels    = GuaranteeNotice::durabilityLabels();
-        $template  = $labels[$locale] ?? $labels['en'];
-        $labelText = sprintf($template, $producer, $years);
+        $labelText = GuaranteeNotice::durabilityNote($producer, $years);
 
         echo '<div class="garantio-durability-label" style="margin: 10px 0; padding: 8px 12px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 4px; font-size: 0.88em; color: #1e40af;">';
         echo '<strong>' . esc_html__('Durability Guarantee:', 'garantio') . '</strong> ';
@@ -113,7 +129,7 @@ final class GuaranteeService implements HasHooks
     }
 
     /**
-     * Render repairability score badge if assigned.
+     * Render the repairability class badge if one is assigned.
      */
     public function renderRepairabilityScore(): void
     {
@@ -122,28 +138,22 @@ final class GuaranteeService implements HasHooks
             return;
         }
 
-        $scoreRaw = $product->get_meta(self::META_REPAIR_SCORE, true);
-        if ($scoreRaw === '' || ! is_numeric($scoreRaw)) {
+        $class = self::repairClass($product);
+        if ($class === null) {
             return;
         }
 
-        $score = round((float) $scoreRaw, 1);
-        if ($score <= 0.0) {
-            return;
-        }
-
-        // Color scale: green (>=8.0), yellow (6.0-7.9), orange (4.0-5.9), red (<4.0)
-        $badgeColor = match (true) {
-            $score >= 8.0 => '#16a34a',
-            $score >= 6.0 => '#ca8a04',
-            $score >= 4.0 => '#ea580c',
+        $badgeColor = match ($class) {
+            'A', 'B' => '#16a34a',
+            'C' => '#ca8a04',
+            'D' => '#ea580c',
             default => '#dc2626',
         };
 
         echo '<div class="garantio-repair-score" style="margin: 8px 0; font-size: 0.88em;">';
         echo '<span style="display:inline-block; padding: 2px 8px; border-radius: 3px; font-weight: bold; color: #fff; background: ' . esc_attr($badgeColor) . ';">';
-        /* translators: %s: numeric score out of 10 */
-        printf(esc_html__('Repairability Index: %s / 10', 'garantio'), esc_html((string) $score));
+        /* translators: %s: repairability class letter, A (most repairable) to E (least repairable) */
+        printf(esc_html__('Repairability class: %s (A to E, Regulation (EU) 2023/1669)', 'garantio'), esc_html($class));
         echo '</span>';
         echo '</div>';
     }
@@ -154,6 +164,11 @@ final class GuaranteeService implements HasHooks
      */
     public function registerGuaranteeTab(array $tabs): array
     {
+        global $product;
+        if (! $product instanceof \WC_Product || ! $this->hasContent($product)) {
+            return $tabs;
+        }
+
         $tabs['garantio_guarantee'] = [
             'title' => __('Guarantee & Durability', 'garantio'),
             'priority' => 35,
@@ -165,8 +180,40 @@ final class GuaranteeService implements HasHooks
 
     public function renderTabContent(): void
     {
-        $this->renderHarmonisedNotice();
+        $this->renderGuaranteeReminder();
         $this->renderDurabilityLabel();
         $this->renderRepairabilityScore();
+    }
+
+    private function showsReminder(\WC_Product $product): bool
+    {
+        return $product->get_meta(self::META_EXEMPT_GUARANTEE, true) !== 'yes';
+    }
+
+    /**
+     * Durability guarantee years worth showing: more than 2 (art. 6(1)(la)), else 0.
+     */
+    private static function durabilityYears(\WC_Product $product): int
+    {
+        $years = (int) $product->get_meta(self::META_DURABILITY_YEARS, true);
+
+        return $years > 2 ? $years : 0;
+    }
+
+    /**
+     * A number stored by 1.0.x is not a class and is not shown.
+     */
+    private static function repairClass(\WC_Product $product): ?string
+    {
+        $raw = (string) $product->get_meta(self::META_REPAIR_SCORE, true);
+
+        return in_array($raw, self::REPAIR_CLASSES, true) ? $raw : null;
+    }
+
+    private function hasContent(\WC_Product $product): bool
+    {
+        return $this->showsReminder($product)
+            || self::durabilityYears($product) > 0
+            || self::repairClass($product) !== null;
     }
 }

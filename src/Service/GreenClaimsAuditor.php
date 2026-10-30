@@ -43,8 +43,23 @@ final class GreenClaimsAuditor
      */
     public function auditProduct(\WC_Product $product): array
     {
-        $content = $product->get_name() . ' ' . $product->get_description() . ' ' . $product->get_short_description();
+        $parts = [$product->get_name(), $product->get_description(), $product->get_short_description()];
 
-        return $this->auditText(strip_tags($content));
+        foreach ($product->get_attributes() as $attribute) {
+            if ($attribute instanceof \WC_Product_Attribute) {
+                $parts[] = $attribute->is_taxonomy()
+                    ? implode(' ', wc_get_product_terms($product->get_id(), $attribute->get_name(), ['fields' => 'names']))
+                    : implode(' ', $attribute->get_options());
+            }
+        }
+
+        foreach ($product->get_children() as $childId) {
+            $child = wc_get_product($childId);
+            if ($child instanceof \WC_Product) {
+                $parts[] = $child->get_description();
+            }
+        }
+
+        return $this->auditText(wp_strip_all_tags(implode(' ', $parts)));
     }
 }

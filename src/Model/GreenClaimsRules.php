@@ -7,13 +7,14 @@ namespace Garantio\Model;
 defined('ABSPATH') || exit;
 
 /**
- * Green claims compliance rules based on Directive (EU) 2024/825 Annex I.
+ * Phrases linked to Annex I, points 4a and 4c, of Directive 2005/29/EC (inserted by Directive (EU) 2024/825).
+ *
+ * Patterns are stems without a trailing word boundary so inflected forms match
+ * ("umweltfreundliche", "przyjaznego dla środowiska").
  */
 final class GreenClaimsRules
 {
     /**
-     * Banned generic environmental terms that require recognized official certification.
-     *
      * @return array<int, array<string, string>>
      */
     public static function bannedPhrases(): array
@@ -21,27 +22,27 @@ final class GreenClaimsRules
         return [
             [
                 'term' => 'climate neutral',
-                'pattern' => '/\b(climate[- ]neutral|carbon[- ]neutral|co2[- ]neutral|neutraln[ye] klimatycznie|klimaneutral)\b/i',
+                'pattern' => '/\b(climate[- ]neutral|carbon[- ]neutral|co2[- ]neutral|neutraln\w* (klimatycznie|pod względem emisji)|klimaneutral|klimatneutral|neutro en carbono|clim[aá]ticamente neutr)/iu',
                 'legal_basis' => 'Directive 2005/29/EC Annex I point 4c (Directive (EU) 2024/825)',
-                'reason' => __('Claims that a product has a neutral, reduced or positive greenhouse gas emission impact based on carbon offsetting are banned.', 'garantio'),
+                'reason' => __('Banned when the neutral, reduced or positive greenhouse gas impact is based on offsetting emissions. Point 4c does not cover a claim based on the product\'s actual lifecycle impact (recital 12 of Directive (EU) 2024/825).', 'garantio'),
             ],
             [
-                'term' => 'eco-friendly / green',
-                'pattern' => '/\b(eco[- ]friendly|environmentally friendly|przyjazn[ye] dla srodowiska|ekologiczn[ye]|umweltfreundlich|ecologico)\b/i',
+                'term' => 'eco-friendly / ecological',
+                'pattern' => '/\b(eco[- ]friendly|environmentally friendly|przyjazn\w* dla [śs]rodowiska|ekologiczn|umweltfreundlich|ecol[óo]gic)/iu',
                 'legal_basis' => 'Directive 2005/29/EC Annex I point 4a (Directive (EU) 2024/825)',
-                'reason' => __('Generic environmental claims without demonstrated recognized excellent environmental performance (e.g. EU Ecolabel) are prohibited.', 'garantio'),
+                'reason' => __('A generic environmental claim is banned unless you can show recognised excellent environmental performance relevant to it, or the claim is specified in clear terms on the same page.', 'garantio'),
             ],
             [
-                'term' => '100% biodegradable',
-                'pattern' => '/\b(100% biodegradable|biodegradable|biodegradowalny|biodegradabil)\b/i',
+                'term' => 'biodegradable',
+                'pattern' => '/\b(biodegradab|biodegradowaln|biologisch abbaubar)/iu',
                 'legal_basis' => 'Directive 2005/29/EC Annex I point 4a (Directive (EU) 2024/825)',
-                'reason' => __('Generic biodegradability claims without demonstrated recognised excellent environmental performance are prohibited.', 'garantio'),
+                'reason' => __('A generic biodegradability claim is banned unless you can show recognised excellent environmental performance relevant to it, or the claim is specified in clear terms on the same page.', 'garantio'),
             ],
             [
                 'term' => 'climate positive / net zero',
-                'pattern' => '/\b(climate positive|net zero|pozytywny klimatycznie)\b/i',
+                'pattern' => '/\b(climate[- ]positive|carbon[- ]positive|net[- ]zero|pozytywn\w* klimatycznie|klimapositiv)/iu',
                 'legal_basis' => 'Directive 2005/29/EC Annex I point 4c (Directive (EU) 2024/825)',
-                'reason' => __('Net zero or climate positive product claims based on carbon offset credits are banned.', 'garantio'),
+                'reason' => __('Banned when the claim is based on offsetting emissions. Point 4c does not cover a claim based on the product\'s actual lifecycle impact (recital 12 of Directive (EU) 2024/825).', 'garantio'),
             ],
         ];
     }

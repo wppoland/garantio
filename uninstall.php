@@ -1,6 +1,6 @@
 <?php
 /**
- * Uninstall routine: clean up plugin options.
+ * Uninstall routine: remove plugin settings and product meta.
  *
  * @package Garantio
  */
@@ -10,10 +10,13 @@ declare(strict_types=1);
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 
 /**
- * Remove this plugin's options from the current site.
+ * Remove this plugin's option and product meta from the current site.
  */
 function garantio_uninstall_site(): void {
 	delete_option( 'garantio_settings' );
+	foreach ( array( '_garantio_durability_years', '_garantio_durability_producer', '_garantio_repair_score', '_garantio_exempt_guarantee' ) as $garantio_meta_key ) {
+		delete_post_meta_by_key( $garantio_meta_key );
+	}
 }
 
 // Options are per site, so a network uninstall has to visit every site.

@@ -4,11 +4,11 @@ Tags: woocommerce, guarantee, legal guarantee, repairability, green claims
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 1.0.3
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Legal guarantee reminder, commercial durability guarantee note, repairability score badge and a green claims phrase check for WooCommerce product pages.
+Legal guarantee reminder, durability guarantee note, repairability score badge and a green claims phrase check for WooCommerce product pages.
 
 == Description ==
 
@@ -18,13 +18,13 @@ Directive (EU) 2024/825 also adds to Annex I of Directive 2005/29/EC a ban on ge
 
 Garantio adds the following to WooCommerce:
 
-* **Legal guarantee reminder**: Shows a text reminder of the legal guarantee of conformity (at least two years) on product pages. It is plain text, not the harmonised notice whose design and content the Commission sets by implementing act (Article 22a of Directive 2011/83/EU).
-* **Durability guarantee note**: Shows a text note when you enter a producer commercial durability guarantee longer than two years. It is not the harmonised label of Article 22a.
+* **Legal guarantee reminder**: Shows a text reminder of the legal guarantee of conformity (at least two years, longer where national law provides) on product pages. It is plain text, not the harmonised notice (see the FAQ).
+* **Durability guarantee note**: Shows a text note when you enter a producer commercial durability guarantee longer than two years. It is plain text, not the harmonised label (see the FAQ).
 * **Repairability score**: Shows a repairability score you enter (1.0 to 10.0) as a colour-coded badge.
-* **Green claims check**: Scans product titles, descriptions and short descriptions in the admin and flags phrases such as "climate neutral" or "eco-friendly" for you to review.
+* **Green claims check**: Scans product titles, descriptions, short descriptions, attribute values and variation descriptions in the admin and flags phrases such as "climate neutral" or "eco-friendly" (English, Polish, German, Spanish) for you to review. It works in the product editor whether or not the reminder is shown.
 * **Flexible Display Options**: Position notices under the single product summary (near the price and add-to-cart button) or inside a dedicated "Guarantee & Durability" product tab.
-* **Digital Goods Exemption**: Easily exempt digital downloads, virtual items, and services from statutory goods guarantee notices.
-* **Full WooCommerce Compatibility**: Compatible with WooCommerce High-Performance Order Storage (HPOS) and Cart and Checkout Blocks. Zero external server calls, zero tracking, and zero monthly fees.
+* **Per-product hide switch**: A checkbox on each product hides the goods reminder, for example on a digital download or a service. It is not set automatically. Article 6(1)(lb) of Directive 2011/83/EU requires a separate reminder for digital content and digital services, which Garantio does not show.
+* **No external calls**: Garantio stores nothing outside your site, makes no external requests and does not touch orders, cart or checkout, so it runs alongside HPOS and the Cart and Checkout Blocks.
 
 = Documentation and links =
 
@@ -52,15 +52,29 @@ Garantio is fully translatable and ships the `garantio.pot` template. Translatio
 Member States had to adopt and publish the transposing measures by 27 March 2026 and apply them from 27 September 2026 (Article 4(1)). The rules bind shops through each country's transposing law: in Poland that act (Dz.U. 2026 poz. 1353) applies from 27 September 2027.
 
 = What is the harmonised notice? =
-Article 6(1)(l) of Directive 2011/83/EU (as amended by Directive (EU) 2024/825) requires a reminder of the legal guarantee of conformity, including its minimum duration of two years, "using the harmonised notice referred to in Article 22a". Article 22a leaves the design and content of that notice to a Commission implementing act. Garantio shows a text reminder, not that notice.
+Article 6(1)(l) of Directive 2011/83/EU (as amended by Directive (EU) 2024/825) requires a reminder of the legal guarantee of conformity, including its minimum duration of two years, "using the harmonised notice referred to in Article 22a". Its design and content are set by Commission Implementing Regulation (EU) 2025/1960: Article 1 says the notice "shall comply with the design and content set out in Annex I", Annex I note (1) says "None of the elements of the harmonised notice can be edited", and Article 3 says it applies from 27 September 2026. Garantio does not display that notice. Where a country's transposing law applies, the plugin's text reminder alone does not meet Article 6(1)(l); use the official notice from Annex I.
 
 = What is the harmonised label? =
-Article 6(1)(la) of Directive 2011/83/EU requires the harmonised label of Article 22a where the producer offers a commercial guarantee of durability at no additional cost, covering the entire good and lasting more than two years, and makes that known to the trader. Its design and content are also set by a Commission implementing act. Garantio shows a text note, not that label.
+Article 6(1)(la) of Directive 2011/83/EU requires the harmonised label of Article 22a where the producer offers a commercial guarantee of durability at no additional cost, covering the entire good and lasting more than two years, and makes that known to the trader. Its design and content are set in Annex II to Implementing Regulation (EU) 2025/1960 (Article 2), applicable from the same date. Garantio shows a text note, not that label.
+
+= Does the reminder fit second-hand goods? =
+Article 10(6) of Directive (EU) 2019/771 lets Member States allow a shorter period for second-hand goods, of not less than one year, when the seller and consumer agree to it. The reminder setting starts at two years, so for such products hide the reminder on the product or write your own text in Custom Notice Override.
 
 = Does Garantio protect against greenwashing penalties? =
-No. The green claims check matches product text against a short list of phrases linked to points 4a and 4c of Annex I to Directive 2005/29/EC (as amended by Directive (EU) 2024/825) and warns you in the product editor. Whether a claim is allowed depends on what you can show for it.
+No. The green claims check matches product text against a short list of phrases linked to points 4a and 4c of Annex I to Directive 2005/29/EC (as amended by Directive (EU) 2024/825) and lists them in the product editor for review. A match is not a finding of a breach: point 4c bans climate claims only when based on offsetting, and recital 9 of Directive (EU) 2024/825 says a claim specified in clear terms on the same medium is not a generic environmental claim. No match does not mean the page is compliant either, because only the listed phrases are checked.
 
 == Changelog ==
+
+= 1.1.0 =
+* Fixed: on a fresh install the reminder, product fields and green claims check stayed off until the settings were saved once.
+* Fixed: switching the reminder off no longer removes the product fields and the green claims check.
+* Fixed: the reminder and durability note are now one English text each, translated through WordPress.org language packs; the built-in Polish, German, Spanish and Romanian texts had no diacritics.
+* Changed: the reminder now says national law may provide a longer period (Article 22a(3) of Directive 2011/83/EU).
+* Fixed: the green claims check now matches Polish, German and Spanish forms with diacritics and inflected endings, and also reads attribute values and variation descriptions.
+* Changed: the green claims box lists phrases to review instead of calling them prohibited, and no longer shows an all-clear tick.
+* Fixed: the product tab is not added when it would be empty; a durability of 2 years or less and a repair score below 1 are not stored; a repair score with a decimal comma is read correctly.
+* Fixed: uninstall also removes the plugin's product meta.
+* Changed: readme names Implementing Regulation (EU) 2025/1960, which sets the harmonised notice and label and applies from 27 September 2026.
 
 = 1.0.3 =
 * Fixed: deleting the plugin on a multisite network now removes its settings from every site, not only the main one.
@@ -72,4 +86,4 @@ No. The green claims check matches product text against a short list of phrases 
 * Fixed: legal references. The guarantee reminder is Article 6(1)(l) of Directive 2011/83/EU and the durability note Article 6(1)(la), not Article 6(1)(ea) or 22a(2); offsetting claims are point 4c of Annex I to Directive 2005/29/EC, not 4b. The readme now says the 2024/825 rules apply from 27 September 2026 in Member States and from 27 September 2027 in Poland, and that the plugin shows text, not the harmonised notice or label.
 
 = 1.0.0 =
-* Initial release: Statutory EU Harmonised Guarantee Notice, commercial durability labels, repairability score display, and green claims compliance auditor.
+* Initial release: legal guarantee reminder text, commercial durability note, repairability score display and green claims phrase check.

@@ -4,7 +4,7 @@ Tags: woocommerce, guarantee, legal guarantee, repairability, green claims
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,9 @@ The repairability class from the energy label of a smartphone or slate tablet. C
 4. Settings page under WooCommerce > EU Legal Guarantee.
 
 == Changelog ==
+
+= 1.1.1 =
+* Fixed: a shop manager could open the settings page but saving it failed with "Sorry, you are not allowed to manage options for this site."
 
 = 1.1.0 =
 * Fixed: on a fresh install the reminder, product fields and green claims check stayed off until the settings were saved once.

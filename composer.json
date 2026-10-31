@@ -22,7 +22,7 @@
         "cs": "phpcs --standard=phpcs.xml.dist",
         "cs:fix": "phpcbf --standard=phpcs.xml.dist",
         "analyse": "phpstan analyse -c phpstan.neon.dist --memory-limit=2G",
-        "test": "php tests/guarantee-notice-check.php && php tests/uninstall-multisite-check.php"
+        "test": "php tests/guarantee-notice-check.php && php tests/uninstall-multisite-check.php && php tests/settings-capability-check.php"
     },
     "config": {
         "allow-plugins": {
